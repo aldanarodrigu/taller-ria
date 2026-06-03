@@ -46,4 +46,24 @@ npm run build
 ```sh
 npm run lint
 ```
-# taller-ria
+
+### Crear un módulo
+
+```sh
+npm run create-module -- usuario
+```
+
+Esto crea `src/modules/usuario/` con archivos base en `component`, `composable`, `store`, `config`, `service` y `type`, listos para extender.
+
+### Navegabilidad del módulo
+
+La comunicación queda organizada así:
+
+`service -> store -> composable -> componente`
+
+1. `service` consume la URL definida en `config` y obtiene los datos.
+2. `store` llama al `service`, guarda el estado y expone acciones.
+3. `composable` consume el `store` y entrega al componente solo lo necesario.
+4. `componente` usa el `composable` para mostrar la interfaz y disparar acciones.
+
+La idea es que cada módulo viva aislado dentro de `src/modules/<nombre>/`, con importaciones internas hacia sus propias capas y sin mezclar lógica con otros módulos.
