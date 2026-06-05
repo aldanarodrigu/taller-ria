@@ -1,14 +1,22 @@
 <script setup lang="ts">
-import { useFavoritos } from '../composable/useFavoritos'
+import type { FavoritosItem } from '../type/favoritos.types'
 
-const { items, loading, error, reload } = useFavoritos()
+defineProps<{
+  error: string | null
+  items: FavoritosItem[]
+  loading: boolean
+}>()
+
+const emit = defineEmits<{
+  reload: []
+}>()
 </script>
 
 <template>
   <section class="favoritos-module">
     <header class="favoritos-module__header">
       <h1>Favoritos</h1>
-      <button type="button" @click="reload">Recargar</button>
+      <button type="button" @click="emit('reload')">Recargar</button>
     </header>
 
     <p v-if="loading">Cargando...</p>

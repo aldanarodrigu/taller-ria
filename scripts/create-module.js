@@ -35,7 +35,7 @@ const moduleRoot = path.join(outputRoot, moduleFolderName)
 
 await assertNotExists(moduleRoot)
 
-for (const folder of ['component', 'composable', 'store', 'config', 'service', 'type']) {
+for (const folder of ['component', 'page', 'composable', 'store', 'config', 'service', 'type']) {
   await mkdir(path.join(moduleRoot, folder), { recursive: true })
 }
 
@@ -43,6 +43,10 @@ const files = [
   {
     filePath: path.join(moduleRoot, 'component', `${pascalName}View.vue`),
     content: createComponentTemplate({ pascalName, moduleFolderName }),
+  },
+  {
+    filePath: path.join(moduleRoot, 'page', `${pascalName}Page.vue`),
+    content: createPageTemplate({ pascalName }),
   },
   {
     filePath: path.join(moduleRoot, 'composable', `use${pascalName}.ts`),
@@ -87,16 +91,24 @@ async function assertNotExists(targetPath) {
 
 function createComponentTemplate({ pascalName, moduleFolderName }) {
   return `<script setup lang="ts">
-import { use${pascalName} } from '../composable/use${pascalName}'
+import type { ${pascalName}Item } from '../type/${moduleFolderName}.types'
 
-const { items, loading, error, reload } = use${pascalName}()
+defineProps<{
+  error: string | null
+  items: ${pascalName}Item[]
+  loading: boolean
+}>()
+
+const emit = defineEmits<{
+  reload: []
+}>()
 </script>
 
 <template>
   <section class="${moduleFolderName}-module">
     <header class="${moduleFolderName}-module__header">
       <h1>${pascalName}</h1>
-      <button type="button" @click="reload">Recargar</button>
+      <button type="button" @click="emit('reload')">Recargar</button>
     </header>
 
     <p v-if="loading">Cargando...</p>
@@ -105,6 +117,25 @@ const { items, loading, error, reload } = use${pascalName}()
       <li v-for="item in items" :key="item.id">{{ item.name }}</li>
     </ul>
   </section>
+</template>
+`
+}
+
+function createPageTemplate({ pascalName }) {
+  return `<script setup lang="ts">
+import ${pascalName}View from '../component/${pascalName}View.vue'
+import { use${pascalName} } from '../composable/use${pascalName}'
+
+const { error, items, loading, reload } = use${pascalName}()
+</script>
+
+<template>
+  <${pascalName}View
+    :error="error"
+    :items="items"
+    :loading="loading"
+    @reload="reload"
+  />
 </template>
 `
 }

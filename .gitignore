@@ -23,7 +23,8 @@ coverage
 *.njsproj
 *.sln
 *.sw?
-
+#Esto ignora todos los archivos pdf que se agreguen a la carpeta
+*.pdf
 *.tsbuildinfo
 
 .eslintcache
@@ -37,3 +38,5 @@ __screenshots__/
 
 # Vite
 *.timestamp-*-*.mjs
+
+/plan/
