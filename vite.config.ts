@@ -15,4 +15,13 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url))
     },
   },
+  server: {
+    proxy: {
+      '/rawg': {
+        target: 'https://api.rawg.io',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/rawg/, '/api'),
+      },
+    },
+  },
 })
