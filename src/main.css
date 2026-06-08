@@ -1,0 +1,76 @@
+/* ── Fuentes ── */
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;500&display=swap');
+
+/* ── Reset ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Variables globales ── */
+:root {
+  /* Colores base */
+  --color-bg: #0d0f14;
+  --color-bg-surface: #161b27;
+  --color-bg-hover: #1a1f2e;
+  --color-border: #1e2433;
+  --color-border-mid: #2d3548;
+  --color-border-focus: #3d4663;
+
+  /* Texto */
+  --color-text: #e2e8f0;
+  --color-text-muted: #8892a4;
+  --color-text-hover: #c4cfe0;
+
+  /* Marca */
+  --color-brand: #7c3aed;
+  --color-brand-dark: #6d28d9;
+  --color-brand-alt: #4f46e5;
+
+  /* Tipografía */
+  --font-display: 'Rajdhani', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+/* ── Base ── */
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* ── Elementos comunes ── */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+  background: none;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+ul,
+ol {
+  list-style: none;
+}
