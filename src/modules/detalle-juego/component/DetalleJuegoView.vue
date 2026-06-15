@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { DetalleJuegoItem } from '../type/detalle-juego.types'
+import type { DetalleJuego } from '../type/detalle-juego.types'
 
 defineProps<{
   error: string | null
-  items: DetalleJuegoItem[]
+  item: DetalleJuego | null
   loading: boolean
 }>()
 
@@ -21,8 +21,12 @@ const emit = defineEmits<{
 
     <p v-if="loading">Cargando...</p>
     <p v-else-if="error">{{ error }}</p>
-    <ul v-else class="detalle-juego-module__list">
-      <li v-for="item in items" :key="item.id">{{ item.name }}</li>
-    </ul>
+    <article v-else-if="item" class="detalle-juego-module__content">
+      <h2>{{ item.name }}</h2>
+      <p>ID: {{ item.id }}</p>
+      <p>Lanzamiento: {{ item.released || 'Sin fecha' }}</p>
+      <p>Rating: {{ item.rating }}</p>
+    </article>
+    <p v-else>No se encontró información del juego.</p>
   </section>
 </template>

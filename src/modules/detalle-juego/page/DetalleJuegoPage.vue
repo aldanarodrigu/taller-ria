@@ -2,13 +2,13 @@
 import DetalleJuegoView from '../component/DetalleJuegoView.vue'
 import { useDetalleJuego } from '../composable/useDetalleJuego'
 
-const { error, items, loading, reload } = useDetalleJuego()
+const { error, item, loading, reload } = useDetalleJuego()
 </script>
 
 <template>
   <DetalleJuegoView
     :error="error"
-    :items="items"
+    :item="item"
     :loading="loading"
     @reload="reload"
   />

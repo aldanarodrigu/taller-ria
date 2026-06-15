@@ -1,3 +1,5 @@
 export const detalleJuegoConfig = {
-  baseUrl: '/api/detalle-juego',
+  apiKey: import.meta.env.VITE_RAWG_KEY,
+  baseUrl: '/rawg',
+  fallbackGameId: 3498, // GTA V, juego de prueba base para hacer test
 } as const
