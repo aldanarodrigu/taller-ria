@@ -1,29 +1,13 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-const FavoritosPage = () => import('../modules/favoritos/page/FavoritosPage.vue')
-const DetalleJuegoPage = () => import('../modules/detalle-juego/page/DetalleJuegoPage.vue')
+import CatalogoView from '../modules/catalogo/component/CatalogoView.vue'
+import HomeView from '@/modules/home/views/HomeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    {
-      path: '/',
-      redirect: '/favoritos',
-    },
-    {
-      path: '/favoritos',
-      name: 'favoritos',
-      component: FavoritosPage,
-    },
-    {
-      path: '/juegos/:id',
-      name: 'detalle-juego',
-      component: DetalleJuegoPage,
-    },
-    {
-      path: '/:pathMatch(.*)*',
-      redirect: '/favoritos',
-    },
+    { path: '/', component: HomeView },
+    { path: '/games', component: CatalogoView },
   ],
 })
 
