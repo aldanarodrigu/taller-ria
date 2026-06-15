@@ -58,11 +58,11 @@ const files = [
   },
   {
     filePath: path.join(moduleRoot, 'config', `${moduleFolderName}.config.ts`),
-    content: createConfigTemplate({ moduleFolderName }),
+    content: createConfigTemplate({ camelName, moduleFolderName }),
   },
   {
     filePath: path.join(moduleRoot, 'service', `${moduleFolderName}.service.ts`),
-    content: createServiceTemplate({ pascalName, moduleFolderName }),
+    content: createServiceTemplate({ camelName, pascalName, moduleFolderName }),
   },
   {
     filePath: path.join(moduleRoot, 'type', `${moduleFolderName}.types.ts`),
@@ -203,19 +203,19 @@ export const use${pascalName}Store = defineStore('${camelName}', {
 `
 }
 
-function createConfigTemplate({ moduleFolderName }) {
-  return `export const ${moduleFolderName}Config = {
+function createConfigTemplate({ camelName, moduleFolderName }) {
+  return `export const ${camelName}Config = {
   baseUrl: '/api/${moduleFolderName}',
 } as const
 `
 }
 
-function createServiceTemplate({ pascalName, moduleFolderName }) {
-  return `import { ${moduleFolderName}Config } from '../config/${moduleFolderName}.config'
+function createServiceTemplate({ camelName, pascalName, moduleFolderName }) {
+  return `import { ${camelName}Config } from '../config/${moduleFolderName}.config'
 import type { ${pascalName}Item } from '../type/${moduleFolderName}.types'
 
 export async function fetch${pascalName}Items(): Promise<${pascalName}Item[]> {
-  const response = await fetch(\`${'${'}${moduleFolderName}Config.baseUrl${'}'}/items\`)
+  const response = await fetch(\`${'${'}${camelName}Config.baseUrl${'}'}/items\`)
 
   if (!response.ok) {
     throw new Error('No se pudieron cargar los datos de ${moduleFolderName}: ' + response.status + ' ' + response.statusText)

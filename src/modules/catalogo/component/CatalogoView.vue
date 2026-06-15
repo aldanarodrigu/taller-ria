@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useCatalogo } from '../composable/useCatalogo'
+import type { JuegoRawg } from '../type/catalogo.types'
 import GameCard from '../../../shared/components/GameCard.vue'
 
 const { items, loading, error, filtros, aplicarFiltro } = useCatalogo()
@@ -25,7 +26,7 @@ const plataformas = [
   { id: 21, label: 'Android' },
 ]
 
-function getNombrePlataformas(juego: typeof items.value[0]): string[] {
+function getNombrePlataformas(juego: JuegoRawg): string[] {
   return juego.platforms.map((p) => p.platform.name)
 }
 </script>
