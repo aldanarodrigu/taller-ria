@@ -1,12 +1,13 @@
 import { computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
+import { prepararDetalleJuego } from './prepararDetalleJuego'
 import { detalleJuegoConfig } from '../config/detalle-juego.config'
 import { useDetalleJuegoStore } from '../store/useDetalleJuegoStore'
 
-function resolveGameId(idParam: string | string[] | undefined) {
-  const rawId = Array.isArray(idParam) ? idParam[0] : idParam
-  const id = Number(rawId)
+function resolverIdJuego(idParametro: string | string[] | undefined) {
+  const idTexto = Array.isArray(idParametro) ? idParametro[0] : idParametro
+  const id = Number(idTexto)
 
   if (!Number.isInteger(id) || id <= 0) {
     return detalleJuegoConfig.fallbackGameId
@@ -16,33 +17,36 @@ function resolveGameId(idParam: string | string[] | undefined) {
 }
 
 export function useDetalleJuego() {
-  const route = useRoute()
-  const store = useDetalleJuegoStore()
+  const ruta = useRoute()
+  const almacenamiento = useDetalleJuegoStore()
 
-  const item = computed(() => store.item)
-  const loading = computed(() => store.loading)
-  const error = computed(() => store.error)
-  const gameId = computed(() => resolveGameId(route.params.id as string | string[] | undefined))
+  const detalle = computed(() => almacenamiento.detalle)
+  const estaCargando = computed(() => almacenamiento.estaCargando)
+  const mensajeError = computed(() => almacenamiento.mensajeError)
+  const idJuego = computed(() => resolverIdJuego(ruta.params.id as string | string[] | undefined))
+  const detallePreparado = computed(() =>
+    detalle.value ? prepararDetalleJuego(detalle.value) : null
+  )
 
-  async function reload() {
-    await store.fetchItem(gameId.value)
+  async function recargar() {
+    await almacenamiento.obtenerDetalle(idJuego.value)
   }
 
   onMounted(() => {
-    void reload()
+    void recargar()
   })
 
-  watch(gameId, (nextId, previousId) => {
-    if (previousId !== undefined && nextId !== previousId) {
-      void store.fetchItem(nextId)
+  watch(idJuego, (siguienteId, idAnterior) => {
+    if (idAnterior !== undefined && siguienteId !== idAnterior) {
+      void almacenamiento.obtenerDetalle(siguienteId)
     }
   })
 
   return {
-    error,
-    item,
-    loading,
-    reload,
-    store,
+    detalle,
+    detallePreparado,
+    estaCargando,
+    mensajeError,
+    recargar,
   }
 }

@@ -6,7 +6,7 @@ import type { DetalleJuego } from '../type/detalle-juego.types'
  * @param id id del juego
  * @returns retorna el detalle de un juego en particular
  */
-export async function getDetalleJuego(id: number): Promise<DetalleJuego> {
+export async function obtenerDetalleJuego(id: number): Promise<DetalleJuego> {
   const params = new URLSearchParams()
   params.set('key', detalleJuegoConfig.apiKey)
 
@@ -20,6 +20,5 @@ export async function getDetalleJuego(id: number): Promise<DetalleJuego> {
 }
 
 export const detalleJuegoService = {
-  getDetalleJuego,
-  
+  obtenerDetalleJuego,
 }

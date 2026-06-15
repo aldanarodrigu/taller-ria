@@ -1,27 +1,28 @@
 import { defineStore } from 'pinia'
-import type { DetalleJuegoState } from '../type/detalle-juego.types'
+import type { EstadoDetalleJuego } from '../type/detalle-juego.types'
 import { detalleJuegoService } from '../service/detalle-juego.service'
-const createState = (): DetalleJuegoState => ({
-  error: null,
-  item: null,
-  loading: false,
+
+const crearEstado = (): EstadoDetalleJuego => ({
+  mensajeError: null,
+  detalle: null,
+  estaCargando: false,
 })
 
 export const useDetalleJuegoStore = defineStore('detalleJuego', {
   actions: {
-    async fetchItem(id: number) {
-      this.loading = true
-      this.error = null
-      this.item = null
+    async obtenerDetalle(id: number) {
+      this.estaCargando = true
+      this.mensajeError = null
+      this.detalle = null
 
       try {
-        this.item = await detalleJuegoService.getDetalleJuego(id)
+        this.detalle = await detalleJuegoService.obtenerDetalleJuego(id)
       } catch (error) {
-        this.error = error instanceof Error ? error.message : 'Error inesperado'
+        this.mensajeError = error instanceof Error ? error.message : 'Error inesperado'
       } finally {
-        this.loading = false
+        this.estaCargando = false
       }
     },
   },
-  state: createState,
+  state: crearEstado,
 })

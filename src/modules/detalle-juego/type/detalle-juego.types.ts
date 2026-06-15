@@ -130,8 +130,55 @@ export interface DetalleJuego {
   clip: unknown | null
 }
 
-export interface DetalleJuegoState {
-  error: string | null
-  item: DetalleJuego | null
-  loading: boolean
+export interface EstadoDetalleJuego {
+  mensajeError: string | null
+  detalle: DetalleJuego | null
+  estaCargando: boolean
+}
+
+export interface DatosCabeceraDetalleJuego {
+  titulo: string
+  tituloOriginal: string
+  imagenPrincipal: string | null
+  imagenSecundaria: string | null
+}
+
+export interface DatoResumenDetalleJuego {
+  etiqueta: string
+  valor: string
+}
+
+export interface DatosResumenDetalleJuego {
+  datosDestacados: DatoResumenDetalleJuego[]
+  desarrolladoras: string[]
+  generos: string[]
+  etiquetas: string[]
+}
+
+export interface DatosDescripcionDetalleJuego {
+  descripcion: string
+  sitioWeb: string | null
+}
+
+export interface DatosPlataformaDetalleJuego {
+  id: number
+  nombre: string
+  fechaLanzamiento: string
+  requisitosMinimos: string | null
+  requisitosRecomendados: string | null
+}
+
+export interface DatosTiendaDetalleJuego {
+  id: number
+  nombre: string
+  dominio: string
+  enlace: string | null
+}
+
+export interface DetalleJuegoPreparado {
+  cabecera: DatosCabeceraDetalleJuego
+  resumen: DatosResumenDetalleJuego
+  descripcion: DatosDescripcionDetalleJuego
+  plataformas: DatosPlataformaDetalleJuego[]
+  tiendas: DatosTiendaDetalleJuego[]
 }
