@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
+
 import CabeceraDetalleJuego from '../component/CabeceraDetalleJuego.vue'
 import DescripcionDetalleJuego from '../component/DescripcionDetalleJuego.vue'
 import EstadoDetalleJuego from '../component/EstadoDetalleJuego.vue'
@@ -7,6 +9,7 @@ import ResumenDetalleJuego from '../component/ResumenDetalleJuego.vue'
 import TiendasDetalleJuego from '../component/TiendasDetalleJuego.vue'
 import { useDetalleJuego } from '../composable/useDetalleJuego'
 
+const router = useRouter()
 const {
   detalle,
   detallePreparado,
@@ -14,6 +17,15 @@ const {
   mensajeError,
   recargar,
 } = useDetalleJuego()
+
+function volverPaginaAnterior() {
+  if (window.history.length > 1) {
+    router.back()
+    return
+  }
+
+  void router.push('/')
+}
 </script>
 
 <template>
@@ -24,9 +36,15 @@ const {
         <h1>Detalle del juego</h1>
       </div>
 
-      <button type="button" class="pagina-detalle-juego__boton" @click="recargar">
-        Recargar
-      </button>
+      <div class="pagina-detalle-juego__acciones">
+        <button type="button" class="pagina-detalle-juego__boton pagina-detalle-juego__boton--secundario" @click="volverPaginaAnterior">
+          Volver
+        </button>
+
+        <button type="button" class="pagina-detalle-juego__boton" @click="recargar">
+          Recargar
+        </button>
+      </div>
     </header>
 
     <EstadoDetalleJuego
@@ -81,6 +99,13 @@ const {
   gap: 1rem;
 }
 
+.pagina-detalle-juego__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
 .pagina-detalle-juego__eyebrow {
   color: #b8c1d8;
   letter-spacing: 0.12em;
@@ -103,6 +128,11 @@ const {
   font-weight: 700;
 }
 
+.pagina-detalle-juego__boton--secundario {
+  background: rgba(22, 27, 39, 0.8);
+  border-color: var(--color-border-mid);
+}
+
 .pagina-detalle-juego__contenido,
 .pagina-detalle-juego__grilla {
   display: grid;
@@ -117,6 +147,11 @@ const {
   .pagina-detalle-juego__encabezado {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .pagina-detalle-juego__acciones {
+    width: 100%;
+    justify-content: flex-start;
   }
 }
 </style>

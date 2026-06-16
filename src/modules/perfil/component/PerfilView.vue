@@ -22,6 +22,7 @@ const emit = defineEmits<{
   'limpiar-mensajes': []
   recargar: []
   restablecer: []
+  volver: []
 }>()
 
 const errorLocal = ref<string | null>(null)
@@ -76,7 +77,10 @@ function manejarRestablecer() {
           </p>
         </div>
 
-        <button type="button" class="perfil-module__refrescar" @click="emit('recargar')">Recargar</button>
+        <div class="perfil-module__encabezado-acciones">
+          <button type="button" class="perfil-module__refrescar" @click="emit('volver')">Volver</button>
+          <button type="button" class="perfil-module__refrescar" @click="emit('recargar')">Recargar</button>
+        </div>
       </header>
 
       <p v-if="cargando" class="perfil-module__estado">Cargando perfil...</p>
@@ -156,7 +160,7 @@ function manejarRestablecer() {
               <button
                 type="submit"
                 class="perfil-module__boton perfil-module__boton--primario"
-                :disabled="guardando"
+                :disabled="guardando || !hayCambios"
               >
                 {{ guardando ? 'Guardando...' : 'Guardar cambios' }}
               </button>
@@ -198,6 +202,13 @@ function manejarRestablecer() {
   justify-content: space-between;
   gap: 1.5rem;
   margin-bottom: 1.75rem;
+}
+
+.perfil-module__encabezado-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: flex-end;
 }
 
 .perfil-module__eyebrow {
@@ -432,6 +443,11 @@ function manejarRestablecer() {
 
   .perfil-module__encabezado {
     flex-direction: column;
+  }
+
+  .perfil-module__encabezado-acciones {
+    width: 100%;
+    justify-content: flex-start;
   }
 }
 

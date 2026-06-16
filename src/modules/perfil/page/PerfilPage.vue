@@ -2,11 +2,13 @@
 import Navbar from '@/shared/components/Navbar.vue'
 import { useAutenticacion } from '@/modules/auth/composable/useAutenticacion'
 import { generarAvatarSeedAleatorio } from '@/modules/auth/service/auth.service'
+import { useRouter } from 'vue-router'
 
 import PerfilView from '../component/PerfilView.vue'
 import { usePerfil } from '../composable/usePerfil'
 import type { DatosPerfilEditable } from '../type/perfil.types'
 
+const router = useRouter()
 const { usuarioActual } = useAutenticacion()
 const {
   actualizarBorrador,
@@ -31,6 +33,15 @@ function manejarGeneracionAvatar() {
   limpiarMensajes()
   actualizarBorrador({ avatarSeed: generarAvatarSeedAleatorio() })
 }
+
+function manejarVolver() {
+  if (window.history.length > 1) {
+    router.back()
+    return
+  }
+
+  void router.push('/')
+}
 </script>
 
 <template>
@@ -51,6 +62,7 @@ function manejarGeneracionAvatar() {
       @limpiar-mensajes="limpiarMensajes"
       @recargar="hidratarPerfil"
       @restablecer="restablecerBorrador"
+      @volver="manejarVolver"
     />
   </section>
 </template>
