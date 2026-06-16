@@ -1,5 +1,6 @@
 import { computed, onMounted } from 'vue'
 
+import type { DatosPerfilEditable } from '@/modules/perfil/type/perfil.types'
 import { useAutenticacionStore } from '../store/useAuthStore'
 import type {
   CredencialesInicioSesion,
@@ -31,6 +32,10 @@ export function useAutenticacion() {
     store.cerrarSesion()
   }
 
+  function actualizarPerfil(datos: DatosPerfilEditable) {
+    return store.actualizarPerfil(datos)
+  }
+
   function limpiarError() {
     store.limpiarError()
   }
@@ -42,6 +47,7 @@ export function useAutenticacion() {
   })
 
   return {
+    actualizarPerfil,
     cargando,
     cerrarSesion,
     error,

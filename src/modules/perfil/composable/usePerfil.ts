@@ -1,27 +1,54 @@
 import { computed, onMounted } from 'vue'
 
 import { usePerfilStore } from '../store/usePerfilStore'
+import type { DatosPerfilEditable } from '../type/perfil.types'
 
 export function usePerfil() {
   const store = usePerfilStore()
 
-  const items = computed(() => store.items)
-  const loading = computed(() => store.loading)
+  const perfil = computed(() => store.perfil)
+  const borrador = computed(() => store.borrador)
+  const cargando = computed(() => store.cargando)
+  const guardando = computed(() => store.guardando)
   const error = computed(() => store.error)
+  const exito = computed(() => store.exito)
 
-  async function reload() {
-    await store.fetchItems()
+  function hidratarPerfil() {
+    store.hidratarPerfil()
+  }
+
+  function actualizarBorrador(cambios: Partial<DatosPerfilEditable>) {
+    store.actualizarBorrador(cambios)
+  }
+
+  function guardarPerfil() {
+    store.guardarPerfil()
+  }
+
+  function limpiarMensajes() {
+    store.limpiarMensajes()
+  }
+
+  function restablecerBorrador() {
+    store.restablecerBorrador()
   }
 
   onMounted(() => {
-    void store.fetchItems()
+    store.hidratarPerfil()
   })
 
   return {
+    actualizarBorrador,
+    borrador,
+    cargando,
     error,
-    items,
-    loading,
-    reload,
+    exito,
+    guardarPerfil,
+    guardando,
+    hidratarPerfil,
+    limpiarMensajes,
+    perfil,
+    restablecerBorrador,
     store,
   }
 }

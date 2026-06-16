@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import type { PerfilItem } from '../type/perfil.types'
+import type { DatosPerfilEditable } from '../type/perfil.types'
 
 defineProps<{
+  borrador: DatosPerfilEditable
+  cargando: boolean
   error: string | null
-  items: PerfilItem[]
-  loading: boolean
+  exito: string | null
+  guardando: boolean
+  perfil: DatosPerfilEditable | null
 }>()
 
 const emit = defineEmits<{
-  reload: []
+  recargar: []
 }>()
 </script>
 
@@ -16,13 +19,18 @@ const emit = defineEmits<{
   <section class="perfil-module">
     <header class="perfil-module__header">
       <h1>Perfil</h1>
-      <button type="button" @click="emit('reload')">Recargar</button>
+      <button type="button" @click="emit('recargar')">Recargar</button>
     </header>
 
-    <p v-if="loading">Cargando...</p>
+    <p v-if="cargando">Cargando...</p>
     <p v-else-if="error">{{ error }}</p>
-    <ul v-else class="perfil-module__list">
-      <li v-for="item in items" :key="item.id">{{ item.name }}</li>
-    </ul>
+    <div v-else class="perfil-module__resumen">
+      <p>Nombre visible actual: {{ perfil?.nombreVisible || 'Sin completar' }}</p>
+      <p>Correo actual: {{ perfil?.correo || 'Sin completar' }}</p>
+      <p>Borrador nombre: {{ borrador.nombreVisible || 'Sin completar' }}</p>
+      <p>Borrador correo: {{ borrador.correo || 'Sin completar' }}</p>
+      <p v-if="guardando">Guardando cambios...</p>
+      <p v-if="exito">{{ exito }}</p>
+    </div>
   </section>
 </template>

@@ -2,14 +2,17 @@
 import PerfilView from '../component/PerfilView.vue'
 import { usePerfil } from '../composable/usePerfil'
 
-const { error, items, loading, reload } = usePerfil()
+const { borrador, cargando, error, exito, guardando, hidratarPerfil, perfil } = usePerfil()
 </script>
 
 <template>
   <PerfilView
+    :borrador="borrador"
+    :cargando="cargando"
     :error="error"
-    :items="items"
-    :loading="loading"
-    @reload="reload"
+    :exito="exito"
+    :guardando="guardando"
+    :perfil="perfil"
+    @recargar="hidratarPerfil"
   />
 </template>

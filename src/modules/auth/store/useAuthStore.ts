@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 
 import {
+  actualizarPerfilUsuario,
   buscarUsuarioPorId,
   cerrarSesion,
   iniciarSesion,
@@ -9,6 +10,7 @@ import {
   obtenerUsuariosGuardados,
   registrarUsuario,
 } from '../service/auth.service'
+import type { DatosPerfilEditable } from '@/modules/perfil/type/perfil.types'
 import type {
   CredencialesInicioSesion,
   DatosRegistro,
@@ -98,6 +100,21 @@ export const useAutenticacionStore = defineStore('auth', {
       } finally {
         this.cargando = false
         this.inicializado = true
+      }
+    },
+
+    actualizarPerfil(datos: DatosPerfilEditable) {
+      this.error = null
+
+      try {
+        const usuarioActualizado = actualizarPerfilUsuario(datos)
+        this.usuarios = obtenerUsuariosGuardados()
+        this.usuarioActual = usuarioActualizado
+
+        return usuarioActualizado
+      } catch (error) {
+        this.error = error instanceof Error ? error.message : 'Error inesperado'
+        throw error
       }
     },
 

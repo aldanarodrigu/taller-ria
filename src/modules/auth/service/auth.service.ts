@@ -1,4 +1,5 @@
 import { authConfig } from '../config/auth.config'
+import type { DatosPerfilEditable } from '@/modules/perfil/type/perfil.types'
 import type {
   CredencialesInicioSesion,
   DatosRegistro,
@@ -107,4 +108,41 @@ export function iniciarSesion(credenciales: CredencialesInicioSesion): UsuarioLo
 
 export function cerrarSesion(): void {
   limpiarSesion()
+}
+
+export function actualizarPerfilUsuario(datos: DatosPerfilEditable): UsuarioLocal {
+  const sesion = obtenerSesionGuardada()
+
+  if (!sesion) {
+    throw new Error('No hay una sesion activa')
+  }
+
+  const usuarios = obtenerUsuariosGuardados()
+  const indiceUsuario = usuarios.findIndex((usuario) => usuario.id === sesion.usuarioId)
+
+  if (indiceUsuario === -1) {
+    limpiarSesion()
+    throw new Error('No se encontro el usuario autenticado')
+  }
+
+  const usuarioActual = usuarios[indiceUsuario]
+
+  if (!usuarioActual) {
+    throw new Error('No se encontro el usuario autenticado')
+  }
+
+  const usuarioActualizado: UsuarioLocal = {
+    ...usuarioActual,
+    perfil: {
+      ...usuarioActual.perfil,
+      correo: datos.correo.trim(),
+      nombreVisible: datos.nombreVisible.trim(),
+    },
+  }
+
+  const usuariosActualizados = [...usuarios]
+  usuariosActualizados[indiceUsuario] = usuarioActualizado
+  guardarUsuarios(usuariosActualizados)
+
+  return usuarioActualizado
 }

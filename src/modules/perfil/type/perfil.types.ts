@@ -1,10 +1,13 @@
-export interface PerfilItem {
-  id: string
-  name: string
+export interface DatosPerfilEditable {
+  correo: string
+  nombreVisible: string
 }
 
-export interface PerfilState {
+export interface EstadoPerfil {
+  borrador: DatosPerfilEditable
+  cargando: boolean
   error: string | null
-  items: PerfilItem[]
-  loading: boolean
+  exito: string | null
+  guardando: boolean
+  perfil: DatosPerfilEditable | null
 }
