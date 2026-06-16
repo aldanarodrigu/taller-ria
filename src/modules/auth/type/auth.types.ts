@@ -1,6 +1,5 @@
 export interface PerfilUsuario {
   avatarSeed: string
-  nickname: string
   nombreVisible: string
   correo: string
 }

@@ -119,12 +119,12 @@ function manejarRestablecer() {
 
           <form class="perfil-module__formulario" @submit.prevent="manejarGuardado">
             <label class="perfil-module__campo">
-              <span>Nombre visible</span>
+              <span>Nombre</span>
               <input
                 :value="borrador.nombreVisible"
                 type="text"
                 name="nombreVisible"
-                placeholder="Como queres que se vea tu nombre"
+                placeholder="Nombre (opcional)"
                 :disabled="guardando"
                 @input="manejarCambio('nombreVisible', ($event.target as HTMLInputElement).value)"
               />

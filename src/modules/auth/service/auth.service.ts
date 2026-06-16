@@ -30,11 +30,10 @@ export function generarAvatarSeedAleatorio(): string {
   return crypto.randomUUID()
 }
 
-function normalizarPerfilUsuario(perfil: Partial<PerfilUsuario> | undefined, nickname: string): PerfilUsuario {
+function normalizarPerfilUsuario(perfil: Partial<PerfilUsuario> | undefined): PerfilUsuario {
   return {
     avatarSeed: perfil?.avatarSeed || generarAvatarSeedAleatorio(),
     correo: perfil?.correo ?? '',
-    nickname: perfil?.nickname?.trim() || nickname,
     nombreVisible: perfil?.nombreVisible ?? '',
   }
 }
@@ -51,7 +50,7 @@ function normalizarUsuarioLocal(usuario: Partial<UsuarioLocal>): UsuarioLocal {
     fechaCreacion: usuario.fechaCreacion,
     id: usuario.id,
     nickname,
-    perfil: normalizarPerfilUsuario(usuario.perfil, nickname),
+    perfil: normalizarPerfilUsuario(usuario.perfil),
   }
 }
 
@@ -118,7 +117,6 @@ export function registrarUsuario(datos: DatosRegistro): UsuarioLocal {
     fechaCreacion: new Date().toISOString(),
     perfil: {
       avatarSeed: generarAvatarSeedAleatorio(),
-      nickname: nicknameNormalizado,
       nombreVisible: '',
       correo: '',
     },
