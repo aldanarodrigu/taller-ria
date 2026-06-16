@@ -2,14 +2,19 @@
 import { computed, ref } from 'vue'
 
 import AvatarDiceBear from '@/shared/components/AvatarDiceBear.vue'
+import FavoritosPanel from '@/shared/components/FavoritosPanel.vue'
 
 import type { DatosPerfilEditable } from '../type/perfil.types'
+import type { JuegoFavoritoResumen } from '@/shared/type/favoritos.types'
 
 const props = defineProps<{
   borrador: DatosPerfilEditable
   cargando: boolean
   error: string | null
   exito: string | null
+  favoritos: JuegoFavoritoResumen[]
+  favoritosCargando: boolean
+  favoritosError: string | null
   guardando: boolean
   nickname: string
   perfil: DatosPerfilEditable | null
@@ -20,8 +25,9 @@ const emit = defineEmits<{
   'generar-avatar': []
   guardar: []
   'limpiar-mensajes': []
-  recargar: []
   restablecer: []
+  'seleccionar-favorito': [id: number]
+  'toggle-favorito': [id: number]
   volver: []
 }>()
 
@@ -79,7 +85,6 @@ function manejarRestablecer() {
 
         <div class="perfil-module__encabezado-acciones">
           <button type="button" class="perfil-module__refrescar" @click="emit('volver')">Volver</button>
-          <button type="button" class="perfil-module__refrescar" @click="emit('recargar')">Recargar</button>
         </div>
       </header>
 
@@ -168,6 +173,19 @@ function manejarRestablecer() {
           </form>
         </section>
       </div>
+
+      <FavoritosPanel
+        class="perfil-module__favoritos"
+
+        :error="favoritosError"
+        :items="favoritos"
+        :loading="favoritosCargando"
+        empty-description="Cuando marques juegos con el corazon apareceran aqui para volver a encontrarlos rapido."
+        empty-title="Aun no guardaste juegos favoritos"
+        titulo="Juegos favoritos"
+        @seleccionar="emit('seleccionar-favorito', $event)"
+        @toggle-favorito="emit('toggle-favorito', $event)"
+      />
     </div>
   </section>
 </template>
@@ -265,6 +283,16 @@ function manejarRestablecer() {
   border-radius: 24px;
   background: rgba(12, 15, 22, 0.9);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(16px);
+}
+
+.perfil-module__favoritos {
+  margin-top: 1.5rem;
+  padding: 1.35rem;
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  border-radius: 24px;
+  background: rgba(12, 15, 22, 0.88);
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.24);
   backdrop-filter: blur(16px);
 }
 

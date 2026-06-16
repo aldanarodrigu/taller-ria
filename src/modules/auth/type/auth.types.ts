@@ -9,6 +9,7 @@ export interface UsuarioLocal {
   nickname: string
   contrasena: string
   perfil: PerfilUsuario
+  favoritos: number[]
   fechaCreacion: string
 }
 

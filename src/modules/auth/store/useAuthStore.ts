@@ -9,6 +9,7 @@ import {
   obtenerSesionGuardada,
   obtenerUsuariosGuardados,
   registrarUsuario,
+  toggleFavoritoUsuarioActual,
 } from '../service/auth.service'
 import type { DatosPerfilEditable } from '@/modules/perfil/type/perfil.types'
 import type {
@@ -116,6 +117,29 @@ export const useAutenticacionStore = defineStore('auth', {
         this.error = error instanceof Error ? error.message : 'Error inesperado'
         throw error
       }
+    },
+
+    toggleFavorito(gameId: number) {
+      this.error = null
+
+      try {
+        const usuarioActualizado = toggleFavoritoUsuarioActual(gameId)
+        this.usuarios = obtenerUsuariosGuardados()
+        this.usuarioActual = usuarioActualizado
+
+        return usuarioActualizado
+      } catch (error) {
+        this.error = error instanceof Error ? error.message : 'Error inesperado'
+        throw error
+      }
+    },
+
+    esFavorito(gameId: number) {
+      return this.usuarioActual?.favoritos.includes(gameId) ?? false
+    },
+
+    obtenerFavoritos() {
+      return this.usuarioActual?.favoritos ?? []
     },
 
     limpiarError() {

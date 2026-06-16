@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { UserIcon } from '@heroicons/vue/24/outline'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
+import { useFavoritosJuegos } from '@/shared/composable/useFavoritosJuegos'
+import FavoritosModal from '@/shared/components/FavoritosModal.vue'
 import AvatarDiceBear from '@/shared/components/AvatarDiceBear.vue'
 import { useAutenticacion } from '@/modules/auth/composable/useAutenticacion'
 
@@ -11,30 +13,74 @@ defineOptions({
 })
 
 interface NavItem {
+  action?: 'favoritos'
   label: string
-  href: string
-  active: boolean
+  route?: string
 }
-
-const navItems = ref<NavItem[]>([
-  { label: 'Inicio', href: '#', active: true },
-  { label: 'Juegos', href: '#', active: false },
-  { label: 'Generos', href: '#', active: false },
-  { label: 'Plataformas', href: '#', active: false },
-  { label: 'Favoritos', href: '#', active: false },
-])
 
 const router = useRouter()
-const { cerrarSesion, hidratarSesion, inicializado, usuarioActual } = useAutenticacion()
+const route = useRoute()
+const { cerrarSesion, favoritos, hidratarSesion, inicializado, toggleFavorito, usuarioActual } = useAutenticacion()
 const menuAbierto = ref(false)
+const modalFavoritosAbierto = ref(false)
 const contenedorPerfil = ref<HTMLElement | null>(null)
-
-function setActive(selected: NavItem): void {
-  navItems.value.forEach((item) => (item.active = item.label === selected.label))
-}
+const favoritosHabilitados = computed(() => modalFavoritosAbierto.value && Boolean(usuarioActual.value))
+const navItems = computed<NavItem[]>(() => [
+  { label: 'Inicio', route: '/' },
+  { label: 'Juegos', route: '/games' },
+  { label: 'Generos' },
+  { label: 'Plataformas' },
+  ...(usuarioActual.value ? [{ label: 'Favoritos', action: 'favoritos' as const }] : []),
+])
+const {
+  error: favoritosError,
+  items: favoritosItems,
+  loading: favoritosLoading,
+  recargar: recargarFavoritos,
+} = useFavoritosJuegos(favoritos, favoritosHabilitados)
 
 function cerrarMenu(): void {
   menuAbierto.value = false
+}
+
+function cerrarFavoritos(): void {
+  modalFavoritosAbierto.value = false
+}
+
+function abrirFavoritos(): void {
+  if (!usuarioActual.value) {
+    return
+  }
+
+  cerrarMenu()
+  modalFavoritosAbierto.value = true
+}
+
+function navegar(item: NavItem): void {
+  if (item.action === 'favoritos') {
+    abrirFavoritos()
+    return
+  }
+
+  if (item.route) {
+    void router.push(item.route)
+  }
+}
+
+function esNavActivo(item: NavItem): boolean {
+  if (item.action === 'favoritos') {
+    return modalFavoritosAbierto.value
+  }
+
+  if (!item.route) {
+    return false
+  }
+
+  if (item.route === '/games') {
+    return route.path === '/games' || route.path.startsWith('/games/')
+  }
+
+  return route.path === item.route
 }
 
 function alternarMenuPerfil(): void {
@@ -56,8 +102,18 @@ function irAPerfil(): void {
   void router.push('/perfil')
 }
 
+function abrirDetalleFavorito(id: number): void {
+  cerrarFavoritos()
+  void router.push(`/games/${id}`)
+}
+
+function toggleFavoritoDesdeModal(id: number): void {
+  toggleFavorito(id)
+}
+
 function salirDeLaSesion(): void {
   cerrarSesion()
+  cerrarFavoritos()
   cerrarMenu()
   void router.push('/iniciar-sesion')
 }
@@ -99,10 +155,10 @@ onBeforeUnmount(() => {
       <a
         v-for="item in navItems"
         :key="item.label"
-        :href="item.href"
+        href="#"
         class="nav-link"
-        :class="{ 'nav-link--active': item.active }"
-        @click.prevent="setActive(item)"
+        :class="{ 'nav-link--active': esNavActivo(item) }"
+        @click.prevent="navegar(item)"
       >
         {{ item.label }}
       </a>
@@ -139,6 +195,17 @@ onBeforeUnmount(() => {
         </div>
       </Transition>
     </div>
+
+    <FavoritosModal
+      :abierto="modalFavoritosAbierto"
+      :error="favoritosError"
+      :items="favoritosItems"
+      :loading="favoritosLoading"
+      @cerrar="cerrarFavoritos"
+      @recargar="recargarFavoritos"
+      @seleccionar="abrirDetalleFavorito"
+      @toggle-favorito="toggleFavoritoDesdeModal"
+    />
   </header>
 </template>
 

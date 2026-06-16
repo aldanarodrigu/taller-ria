@@ -40,10 +40,6 @@ function volverPaginaAnterior() {
         <button type="button" class="pagina-detalle-juego__boton pagina-detalle-juego__boton--secundario" @click="volverPaginaAnterior">
           Volver
         </button>
-
-        <button type="button" class="pagina-detalle-juego__boton" @click="recargar">
-          Recargar
-        </button>
       </div>
     </header>
 

@@ -1,8 +1,13 @@
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
+
+import { useAutenticacion } from '@/modules/auth/composable/useAutenticacion'
 import { useCatalogo } from '../composable/useCatalogo'
 import type { JuegoRawg } from '../type/catalogo.types'
 import GameCard from '../../../shared/components/GameCard.vue'
 
+const router = useRouter()
+const { esFavorito, toggleFavorito, usuarioActual } = useAutenticacion()
 const { items, loading, error, filtros, aplicarFiltro } = useCatalogo()
 
 const generos = [
@@ -28,6 +33,15 @@ const plataformas = [
 
 function getNombrePlataformas(juego: JuegoRawg): string[] {
   return juego.platforms.map((p) => p.platform.name)
+}
+
+function manejarToggleFavorito(gameId: number) {
+  if (!usuarioActual.value) {
+    void router.push('/iniciar-sesion')
+    return
+  }
+
+  toggleFavorito(gameId)
 }
 </script>
 
@@ -94,8 +108,8 @@ function getNombrePlataformas(juego: JuegoRawg): string[] {
           :imagen="juego.background_image"
           :rating="juego.rating"
           :plataformas="getNombrePlataformas(juego)"
-          :es-favorito="false"
-          @toggle-favorito="() => {}"
+          :es-favorito="esFavorito(juego.id)"
+          @toggle-favorito="manejarToggleFavorito"
         />
       </div>
     </main>

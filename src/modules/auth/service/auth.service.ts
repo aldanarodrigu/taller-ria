@@ -38,6 +38,14 @@ function normalizarPerfilUsuario(perfil: Partial<PerfilUsuario> | undefined): Pe
   }
 }
 
+function normalizarFavoritos(favoritos: unknown): number[] {
+  if (!Array.isArray(favoritos)) {
+    return []
+  }
+
+  return favoritos.filter((favorito): favorito is number => Number.isInteger(favorito))
+}
+
 function normalizarUsuarioLocal(usuario: Partial<UsuarioLocal>): UsuarioLocal {
   const nickname = usuario.nickname?.trim()
 
@@ -48,6 +56,7 @@ function normalizarUsuarioLocal(usuario: Partial<UsuarioLocal>): UsuarioLocal {
   return {
     contrasena: usuario.contrasena,
     fechaCreacion: usuario.fechaCreacion,
+    favoritos: normalizarFavoritos(usuario.favoritos),
     id: usuario.id,
     nickname,
     perfil: normalizarPerfilUsuario(usuario.perfil),
@@ -93,6 +102,37 @@ export function buscarUsuarioPorId(usuarioId: string, usuarios = obtenerUsuarios
   return usuarios.find((usuario) => usuario.id === usuarioId) ?? null
 }
 
+function actualizarUsuarioAutenticado(
+  actualizador: (usuario: UsuarioLocal) => UsuarioLocal,
+): UsuarioLocal {
+  const sesion = obtenerSesionGuardada()
+
+  if (!sesion) {
+    throw new Error('No hay una sesion activa')
+  }
+
+  const usuarios = obtenerUsuariosGuardados()
+  const indiceUsuario = usuarios.findIndex((usuario) => usuario.id === sesion.usuarioId)
+
+  if (indiceUsuario === -1) {
+    limpiarSesion()
+    throw new Error('No se encontro el usuario autenticado')
+  }
+
+  const usuarioActual = usuarios[indiceUsuario]
+
+  if (!usuarioActual) {
+    throw new Error('No se encontro el usuario autenticado')
+  }
+
+  const usuarioActualizado = actualizador(usuarioActual)
+  const usuariosActualizados = [...usuarios]
+  usuariosActualizados[indiceUsuario] = usuarioActualizado
+  guardarUsuarios(usuariosActualizados)
+
+  return usuarioActualizado
+}
+
 export function registrarUsuario(datos: DatosRegistro): UsuarioLocal {
   const nicknameNormalizado = datos.nickname.trim()
   const contrasenaIngresada = datos.contrasena
@@ -115,6 +155,7 @@ export function registrarUsuario(datos: DatosRegistro): UsuarioLocal {
     nickname: nicknameNormalizado,
     contrasena: contrasenaIngresada,
     fechaCreacion: new Date().toISOString(),
+    favoritos: [],
     perfil: {
       avatarSeed: generarAvatarSeedAleatorio(),
       nombreVisible: '',
@@ -151,28 +192,36 @@ export function cerrarSesion(): void {
   limpiarSesion()
 }
 
-export function actualizarPerfilUsuario(datos: DatosPerfilEditable): UsuarioLocal {
+export function obtenerFavoritosUsuarioActual(): number[] {
   const sesion = obtenerSesionGuardada()
 
   if (!sesion) {
-    throw new Error('No hay una sesion activa')
+    return []
   }
 
-  const usuarios = obtenerUsuariosGuardados()
-  const indiceUsuario = usuarios.findIndex((usuario) => usuario.id === sesion.usuarioId)
+  const usuarioActual = buscarUsuarioPorId(sesion.usuarioId)
+  return usuarioActual?.favoritos ?? []
+}
 
-  if (indiceUsuario === -1) {
-    limpiarSesion()
-    throw new Error('No se encontro el usuario autenticado')
-  }
+export function esJuegoFavorito(gameId: number): boolean {
+  return obtenerFavoritosUsuarioActual().includes(gameId)
+}
 
-  const usuarioActual = usuarios[indiceUsuario]
+export function toggleFavoritoUsuarioActual(gameId: number): UsuarioLocal {
+  return actualizarUsuarioAutenticado((usuarioActual) => {
+    const favoritos = usuarioActual.favoritos.includes(gameId)
+      ? usuarioActual.favoritos.filter((favoritoId) => favoritoId !== gameId)
+      : [...usuarioActual.favoritos, gameId]
 
-  if (!usuarioActual) {
-    throw new Error('No se encontro el usuario autenticado')
-  }
+    return {
+      ...usuarioActual,
+      favoritos,
+    }
+  })
+}
 
-  const usuarioActualizado: UsuarioLocal = {
+export function actualizarPerfilUsuario(datos: DatosPerfilEditable): UsuarioLocal {
+  return actualizarUsuarioAutenticado((usuarioActual) => ({
     ...usuarioActual,
     perfil: {
       ...usuarioActual.perfil,
@@ -180,11 +229,5 @@ export function actualizarPerfilUsuario(datos: DatosPerfilEditable): UsuarioLoca
       correo: datos.correo.trim(),
       nombreVisible: datos.nombreVisible.trim(),
     },
-  }
-
-  const usuariosActualizados = [...usuarios]
-  usuariosActualizados[indiceUsuario] = usuarioActualizado
-  guardarUsuarios(usuariosActualizados)
-
-  return usuarioActualizado
+  }))
 }

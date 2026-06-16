@@ -36,6 +36,16 @@ export function useAutenticacion() {
     return store.actualizarPerfil(datos)
   }
 
+  function toggleFavorito(gameId: number) {
+    return store.toggleFavorito(gameId)
+  }
+
+  function esFavorito(gameId: number) {
+    return store.esFavorito(gameId)
+  }
+
+  const favoritos = computed(() => store.obtenerFavoritos())
+
   function limpiarError() {
     store.limpiarError()
   }
@@ -51,12 +61,15 @@ export function useAutenticacion() {
     cargando,
     cerrarSesion,
     error,
+    esFavorito,
+    favoritos,
     hidratarSesion,
     inicializado,
     iniciarSesion,
     limpiarError,
     registrarse,
     store,
+    toggleFavorito,
     usuarioActual,
     usuarios,
   }

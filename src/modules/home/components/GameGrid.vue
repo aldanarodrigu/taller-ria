@@ -2,11 +2,20 @@
 import GameCard from '@/shared/components/GameCard.vue'
 import type { JuegoRawg } from '../types/home.types'
 
-defineProps<{
+const props = defineProps<{
+  favoritosIds: number[]
   title: string
   juegos: JuegoRawg[]
   cargando: boolean
 }>()
+
+const emit = defineEmits<{
+  toggleFavorito: [id: number]
+}>()
+
+function esFavorito(gameId: number): boolean {
+  return props.favoritosIds.includes(gameId)
+}
 </script>
 
 <template>
@@ -24,7 +33,8 @@ defineProps<{
         :imagen="juego.background_image ?? ''"
         :rating="juego.rating"
         :plataformas="juego.platforms.map((p) => p.platform.name)"
-        :es-favorito="false"
+        :es-favorito="esFavorito(juego.id)"
+        @toggle-favorito="emit('toggleFavorito', $event)"
       />
     </div>
   </section>

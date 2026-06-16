@@ -2,6 +2,7 @@
 import Navbar from '@/shared/components/Navbar.vue'
 import { useAutenticacion } from '@/modules/auth/composable/useAutenticacion'
 import { generarAvatarSeedAleatorio } from '@/modules/auth/service/auth.service'
+import { useFavoritosJuegos } from '@/shared/composable/useFavoritosJuegos'
 import { useRouter } from 'vue-router'
 
 import PerfilView from '../component/PerfilView.vue'
@@ -9,7 +10,7 @@ import { usePerfil } from '../composable/usePerfil'
 import type { DatosPerfilEditable } from '../type/perfil.types'
 
 const router = useRouter()
-const { usuarioActual } = useAutenticacion()
+const { favoritos, toggleFavorito, usuarioActual } = useAutenticacion()
 const {
   actualizarBorrador,
   borrador,
@@ -18,11 +19,15 @@ const {
   exito,
   guardando,
   guardarPerfil,
-  hidratarPerfil,
   limpiarMensajes,
   perfil,
   restablecerBorrador,
 } = usePerfil()
+const {
+  error: favoritosError,
+  items: favoritosItems,
+  loading: favoritosLoading,
+} = useFavoritosJuegos(favoritos)
 
 function manejarActualizacionBorrador(cambios: Partial<DatosPerfilEditable>) {
   limpiarMensajes()
@@ -42,6 +47,14 @@ function manejarVolver() {
 
   void router.push('/')
 }
+
+function manejarSeleccionFavorito(id: number) {
+  void router.push(`/games/${id}`)
+}
+
+function manejarToggleFavorito(id: number) {
+  toggleFavorito(id)
+}
 </script>
 
 <template>
@@ -56,12 +69,16 @@ function manejarVolver() {
       :guardando="guardando"
       :nickname="usuarioActual?.nickname ?? ''"
       :perfil="perfil"
+      :favoritos="favoritosItems"
+      :favoritos-cargando="favoritosLoading"
+      :favoritos-error="favoritosError"
       @generar-avatar="manejarGeneracionAvatar"
       @actualizar-borrador="manejarActualizacionBorrador"
       @guardar="guardarPerfil"
       @limpiar-mensajes="limpiarMensajes"
-      @recargar="hidratarPerfil"
       @restablecer="restablecerBorrador"
+      @seleccionar-favorito="manejarSeleccionFavorito"
+      @toggle-favorito="manejarToggleFavorito"
       @volver="manejarVolver"
     />
   </section>
