@@ -3,11 +3,10 @@ import type { DatosPerfilEditable } from '@/modules/perfil/type/perfil.types'
 import type {
   CredencialesInicioSesion,
   DatosRegistro,
+  PerfilUsuario,
   SesionAuth,
   UsuarioLocal,
 } from '../type/auth.types'
-
-const COLOR_AVATAR_POR_DEFECTO = '#7c3aed'
 
 function leerJson<T>(clave: string, valorPorDefecto: T): T {
   const valorGuardado = localStorage.getItem(clave)
@@ -27,8 +26,52 @@ function generarIdUsuario(): string {
   return `usuario-${crypto.randomUUID()}`
 }
 
+export function generarAvatarSeedAleatorio(): string {
+  return crypto.randomUUID()
+}
+
+function normalizarPerfilUsuario(perfil: Partial<PerfilUsuario> | undefined, nickname: string): PerfilUsuario {
+  return {
+    avatarSeed: perfil?.avatarSeed || generarAvatarSeedAleatorio(),
+    correo: perfil?.correo ?? '',
+    nickname: perfil?.nickname?.trim() || nickname,
+    nombreVisible: perfil?.nombreVisible ?? '',
+  }
+}
+
+function normalizarUsuarioLocal(usuario: Partial<UsuarioLocal>): UsuarioLocal {
+  const nickname = usuario.nickname?.trim()
+
+  if (!usuario.id || !nickname || !usuario.contrasena || !usuario.fechaCreacion) {
+    throw new Error('Se encontraron datos de usuario invalidos')
+  }
+
+  return {
+    contrasena: usuario.contrasena,
+    fechaCreacion: usuario.fechaCreacion,
+    id: usuario.id,
+    nickname,
+    perfil: normalizarPerfilUsuario(usuario.perfil, nickname),
+  }
+}
+
 export function obtenerUsuariosGuardados(): UsuarioLocal[] {
-  return leerJson<UsuarioLocal[]>(authConfig.claveUsuarios, [])
+  const usuariosRaw = leerJson<Partial<UsuarioLocal>[]>(authConfig.claveUsuarios, [])
+  const usuariosNormalizados = usuariosRaw
+    .map((usuario) => {
+      try {
+        return normalizarUsuarioLocal(usuario)
+      } catch {
+        return null
+      }
+    })
+    .filter((usuario): usuario is UsuarioLocal => usuario !== null)
+
+  if (JSON.stringify(usuariosRaw) !== JSON.stringify(usuariosNormalizados)) {
+    guardarUsuarios(usuariosNormalizados)
+  }
+
+  return usuariosNormalizados
 }
 
 export function guardarUsuarios(usuarios: UsuarioLocal[]): void {
@@ -74,10 +117,10 @@ export function registrarUsuario(datos: DatosRegistro): UsuarioLocal {
     contrasena: contrasenaIngresada,
     fechaCreacion: new Date().toISOString(),
     perfil: {
+      avatarSeed: generarAvatarSeedAleatorio(),
       nickname: nicknameNormalizado,
       nombreVisible: '',
       correo: '',
-      colorAvatar: COLOR_AVATAR_POR_DEFECTO,
     },
   }
 
@@ -135,6 +178,7 @@ export function actualizarPerfilUsuario(datos: DatosPerfilEditable): UsuarioLoca
     ...usuarioActual,
     perfil: {
       ...usuarioActual.perfil,
+      avatarSeed: datos.avatarSeed,
       correo: datos.correo.trim(),
       nombreVisible: datos.nombreVisible.trim(),
     },

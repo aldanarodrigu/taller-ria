@@ -16,6 +16,8 @@
     "create-module": "node ./scripts/create-module.js"
   },
   "dependencies": {
+    "@dicebear/core": "^10.3.0",
+    "@dicebear/styles": "^10.2.0",
     "@heroicons/vue": "^2.2.0",
     "pinia": "^3.0.4",
     "vue": "^3.5.32",

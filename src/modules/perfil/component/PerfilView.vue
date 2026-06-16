@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 
+import AvatarDiceBear from '@/shared/components/AvatarDiceBear.vue'
+
 import type { DatosPerfilEditable } from '../type/perfil.types'
 
 const props = defineProps<{
@@ -15,6 +17,7 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   'actualizar-borrador': [cambios: Partial<DatosPerfilEditable>]
+  'generar-avatar': []
   guardar: []
   'limpiar-mensajes': []
   recargar: []
@@ -26,6 +29,7 @@ const errorLocal = ref<string | null>(null)
 const mensajeError = computed(() => errorLocal.value ?? props.error)
 const hayCambios = computed(
   () =>
+    props.perfil?.avatarSeed !== props.borrador.avatarSeed ||
     props.perfil?.correo !== props.borrador.correo ||
     props.perfil?.nombreVisible !== props.borrador.nombreVisible,
 )
@@ -79,9 +83,12 @@ function manejarRestablecer() {
 
       <div v-else class="perfil-module__tarjeta">
         <aside class="perfil-module__resumen">
-          <div class="perfil-module__placeholder-avatar">
-            <span>{{ nickname ? nickname.charAt(0).toUpperCase() : '?' }}</span>
-          </div>
+          <AvatarDiceBear
+            class="perfil-module__avatar"
+            :seed="borrador.avatarSeed"
+            :size="96"
+            alt="Avatar seleccionado"
+          />
 
           <div class="perfil-module__resumen-texto">
             <p class="perfil-module__resumen-label">Cuenta activa</p>
@@ -90,6 +97,15 @@ function manejarRestablecer() {
               Tu nickname se usa para iniciar sesion y por ahora no se puede editar desde esta pantalla.
             </p>
           </div>
+
+          <button
+            type="button"
+            class="perfil-module__boton perfil-module__boton--secundario"
+            :disabled="guardando"
+            @click="emit('generar-avatar')"
+          >
+            Generar otro avatar
+          </button>
         </aside>
 
         <section class="perfil-module__editor">
@@ -253,18 +269,13 @@ function manejarRestablecer() {
   border: 1px solid rgba(99, 102, 241, 0.18);
 }
 
-.perfil-module__placeholder-avatar {
-  width: 72px;
-  height: 72px;
-  display: grid;
-  place-items: center;
+.perfil-module__avatar {
+  width: 96px;
+  height: 96px;
   border-radius: 20px;
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.9), rgba(79, 70, 229, 0.9));
-  color: #f8fafc;
-  font-family: var(--font-display);
-  font-size: 1.9rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  overflow: hidden;
+  border: 2px solid rgba(124, 58, 237, 0.35);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.24);
 }
 
 .perfil-module__resumen-texto {

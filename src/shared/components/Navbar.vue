@@ -3,6 +3,7 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { UserIcon } from '@heroicons/vue/24/outline'
 import { useRouter } from 'vue-router'
 
+import AvatarDiceBear from '@/shared/components/AvatarDiceBear.vue'
 import { useAutenticacion } from '@/modules/auth/composable/useAutenticacion'
 
 defineOptions({
@@ -118,7 +119,14 @@ onBeforeUnmount(() => {
         :aria-label="usuarioActual ? 'Abrir menu de usuario' : 'Ir a iniciar sesion'"
         @click.stop="alternarMenuPerfil"
       >
-        <UserIcon class="perfil-icon" />
+        <AvatarDiceBear
+          v-if="usuarioActual"
+          class="perfil-avatar"
+          :seed="usuarioActual.perfil.avatarSeed"
+          :size="28"
+          alt="Avatar del usuario"
+        />
+        <UserIcon v-else class="perfil-icon" />
       </button>
 
       <Transition name="menu-perfil">
@@ -243,6 +251,13 @@ onBeforeUnmount(() => {
   width: 16px;
   height: 16px;
   color: var(--color-text);
+}
+
+.perfil-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  overflow: hidden;
 }
 
 .perfil-menu {

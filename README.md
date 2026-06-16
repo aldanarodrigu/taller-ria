@@ -27,6 +27,9 @@ See [Vite Configuration Reference](https://vite.dev/config/).
 
 ```sh
 npm install
+
+-- Para libreria de avatars
+npm install @dicebear/core @dicebear/styles --save
 ```
 
 ### Compile and Hot-Reload for Development

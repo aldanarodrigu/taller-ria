@@ -1,4 +1,5 @@
 export interface DatosPerfilEditable {
+  avatarSeed: string
   correo: string
   nombreVisible: string
 }

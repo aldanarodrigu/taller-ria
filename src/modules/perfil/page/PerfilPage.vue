@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Navbar from '@/shared/components/Navbar.vue'
 import { useAutenticacion } from '@/modules/auth/composable/useAutenticacion'
+import { generarAvatarSeedAleatorio } from '@/modules/auth/service/auth.service'
 
 import PerfilView from '../component/PerfilView.vue'
 import { usePerfil } from '../composable/usePerfil'
@@ -25,6 +26,11 @@ function manejarActualizacionBorrador(cambios: Partial<DatosPerfilEditable>) {
   limpiarMensajes()
   actualizarBorrador(cambios)
 }
+
+function manejarGeneracionAvatar() {
+  limpiarMensajes()
+  actualizarBorrador({ avatarSeed: generarAvatarSeedAleatorio() })
+}
 </script>
 
 <template>
@@ -39,6 +45,7 @@ function manejarActualizacionBorrador(cambios: Partial<DatosPerfilEditable>) {
       :guardando="guardando"
       :nickname="usuarioActual?.nickname ?? ''"
       :perfil="perfil"
+      @generar-avatar="manejarGeneracionAvatar"
       @actualizar-borrador="manejarActualizacionBorrador"
       @guardar="guardarPerfil"
       @limpiar-mensajes="limpiarMensajes"

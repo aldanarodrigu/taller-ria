@@ -6,6 +6,7 @@ import type { EstadoPerfil } from '../type/perfil.types'
 import type { DatosPerfilEditable } from '../type/perfil.types'
 
 const crearDatosVacios = (): DatosPerfilEditable => ({
+  avatarSeed: '',
   correo: '',
   nombreVisible: '',
 })
@@ -40,6 +41,7 @@ export const usePerfilStore = defineStore('perfil', {
         }
 
         const perfilActual: DatosPerfilEditable = {
+          avatarSeed: authStore.usuarioActual.perfil.avatarSeed,
           correo: authStore.usuarioActual.perfil.correo,
           nombreVisible: authStore.usuarioActual.perfil.nombreVisible,
         }
@@ -78,12 +80,14 @@ export const usePerfilStore = defineStore('perfil', {
         }
 
         const datosActualizados: DatosPerfilEditable = {
+          avatarSeed: this.borrador.avatarSeed,
           correo: this.borrador.correo.trim(),
           nombreVisible: this.borrador.nombreVisible.trim(),
         }
 
         const usuarioActualizado = authStore.actualizarPerfil(datosActualizados)
         const perfilActualizado: DatosPerfilEditable = {
+          avatarSeed: usuarioActualizado.perfil.avatarSeed,
           correo: usuarioActualizado.perfil.correo,
           nombreVisible: usuarioActualizado.perfil.nombreVisible,
         }
