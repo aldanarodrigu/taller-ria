@@ -119,6 +119,7 @@ onBeforeUnmount(() => {
         :aria-label="usuarioActual ? 'Abrir menu de usuario' : 'Ir a iniciar sesion'"
         @click.stop="alternarMenuPerfil"
       >
+        <span v-if="usuarioActual" class="perfil-nickname">{{ usuarioActual.nickname }}</span>
         <AvatarDiceBear
           v-if="usuarioActual"
           class="perfil-avatar"
@@ -231,20 +232,34 @@ onBeforeUnmount(() => {
 }
 
 .perfil-button {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--color-brand), var(--color-brand-alt));
-  border: 2px solid var(--color-border-mid);
+  min-height: 32px;
+  padding: 0.125rem 0;
+  border-radius: 0;
+  background: transparent;
+  border: none;
   display: flex;
   align-items: center;
+  gap: 0.5rem;
   justify-content: center;
   cursor: pointer;
-  transition: border-color 0.2s;
+  transition:
+    color 0.2s,
+    transform 0.2s;
 }
 
 .perfil-button:hover {
-  border-color: var(--color-brand);
+  transform: translateY(-1px);
+}
+
+.perfil-nickname {
+  max-width: 9rem;
+  overflow: hidden;
+  color: var(--color-text);
+  font-size: 0.88rem;
+  font-weight: 700;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .perfil-icon {
@@ -258,6 +273,12 @@ onBeforeUnmount(() => {
   height: 28px;
   border-radius: 999px;
   overflow: hidden;
+  border: 2px solid var(--color-border-mid);
+  transition: border-color 0.2s;
+}
+
+.perfil-button:hover .perfil-avatar {
+  border-color: var(--color-brand);
 }
 
 .perfil-menu {
@@ -319,5 +340,16 @@ onBeforeUnmount(() => {
 .menu-perfil-leave-from {
   opacity: 1;
   transform: translateY(0) scale(1);
+}
+
+@media (max-width: 720px) {
+  .perfil-button {
+    padding-left: 0.55rem;
+  }
+
+  .perfil-nickname {
+    max-width: 6rem;
+    font-size: 0.82rem;
+  }
 }
 </style>
