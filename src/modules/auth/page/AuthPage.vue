@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import AuthView from '../component/AuthView.vue'
-import { useAuth } from '../composable/useAuth'
+import { useAutenticacion } from '../composable/useAuth'
 
-const { error, items, loading, reload } = useAuth()
+const { cargando, error, usuarioActual, usuarios } = useAutenticacion()
 </script>
 
 <template>
   <AuthView
+    :cargando="cargando"
     :error="error"
-    :items="items"
-    :loading="loading"
-    @reload="reload"
+    :usuario-actual="usuarioActual"
+    :usuarios="usuarios"
   />
 </template>

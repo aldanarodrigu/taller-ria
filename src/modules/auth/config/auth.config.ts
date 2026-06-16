@@ -1,3 +1,4 @@
 export const authConfig = {
-  baseUrl: '/api/auth',
+  claveSesion: 'auth.sesion',
+  claveUsuarios: 'auth.usuarios',
 } as const

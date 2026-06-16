@@ -1,27 +1,57 @@
 import { computed, onMounted } from 'vue'
 
-import { useAuthStore } from '../store/useAuthStore'
+import { useAutenticacionStore } from '../store/useAuthStore'
+import type {
+  CredencialesInicioSesion,
+  DatosRegistro,
+} from '../type/auth.types'
 
-export function useAuth() {
-  const store = useAuthStore()
+export function useAutenticacion() {
+  const store = useAutenticacionStore()
 
-  const items = computed(() => store.items)
-  const loading = computed(() => store.loading)
+  const usuarios = computed(() => store.usuarios)
+  const usuarioActual = computed(() => store.usuarioActual)
+  const cargando = computed(() => store.cargando)
   const error = computed(() => store.error)
+  const inicializado = computed(() => store.inicializado)
 
-  async function reload() {
-    await store.fetchItems()
+  function hidratarSesion() {
+    store.hidratarSesion()
+  }
+
+  function registrarse(datos: DatosRegistro) {
+    store.registrarse(datos)
+  }
+
+  function iniciarSesion(credenciales: CredencialesInicioSesion) {
+    store.iniciarSesion(credenciales)
+  }
+
+  function cerrarSesion() {
+    store.cerrarSesion()
+  }
+
+  function limpiarError() {
+    store.limpiarError()
   }
 
   onMounted(() => {
-    void store.fetchItems()
+    if (!store.inicializado) {
+      store.hidratarSesion()
+    }
   })
 
   return {
+    cargando,
     error,
-    items,
-    loading,
-    reload,
+    hidratarSesion,
+    inicializado,
+    iniciarSesion,
+    limpiarError,
+    registrarse,
     store,
+    cerrarSesion,
+    usuarioActual,
+    usuarios,
   }
 }
