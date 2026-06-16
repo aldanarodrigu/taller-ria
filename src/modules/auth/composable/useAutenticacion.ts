@@ -43,6 +43,7 @@ export function useAutenticacion() {
 
   return {
     cargando,
+    cerrarSesion,
     error,
     hidratarSesion,
     inicializado,
@@ -50,7 +51,6 @@ export function useAutenticacion() {
     limpiarError,
     registrarse,
     store,
-    cerrarSesion,
     usuarioActual,
     usuarios,
   }

@@ -34,3 +34,13 @@ export interface CredencialesInicioSesion {
   nickname: string
   contrasena: string
 }
+
+export interface CampoFormularioAutenticacion {
+  clave: string
+  etiqueta: string
+  tipo: 'email' | 'password' | 'text'
+  autocomplete?: string
+  placeholder: string
+}
+
+export type ValoresFormularioAutenticacion = Record<string, string>
