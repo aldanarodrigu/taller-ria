@@ -73,16 +73,14 @@ onBeforeUnmount(() => {
 
           <FavoritosPanel
             :error="error"
-            :items="items"
-            :loading="loading"
-            empty-description="Marca juegos con el corazon para encontrarlos rapido desde aqui."
-            empty-title="Tu lista de favoritos esta vacia"
-            :mostrar-recargar="true"
-            @recargar="emit('recargar')"
-            @seleccionar="emit('seleccionar', $event)"
-            @toggle-favorito="emit('toggleFavorito', $event)"
-          />
-        </section>
+          :items="items"
+          :loading="loading"
+          empty-description="Marca juegos con el corazon para encontrarlos rapido desde aqui."
+          empty-title="Tu lista de favoritos esta vacia"
+          @seleccionar="emit('seleccionar', $event)"
+          @toggle-favorito="emit('toggleFavorito', $event)"
+        />
+      </section>
       </div>
     </Transition>
   </Teleport>
