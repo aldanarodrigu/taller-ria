@@ -20,4 +20,7 @@ export interface BuscadorState {
   items: JuegoRawg[]
   loading: boolean
   error: string | null
+  currentPage: number
+  totalCount: number
+  pageSize: number
 }

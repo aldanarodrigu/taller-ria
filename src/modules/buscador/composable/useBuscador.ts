@@ -9,10 +9,18 @@ export function useBuscador() {
   const items = computed(() => store.items)
   const loading = computed(() => store.loading)
   const error = computed(() => store.error)
+  const currentPage = computed(() => store.currentPage)
+  const totalCount = computed(() => store.totalCount)
+  const pageSize = computed(() => store.pageSize)
+  const totalPages = computed(() => Math.ceil(totalCount.value / pageSize.value))
 
   async function buscar(valor: string) {
     await store.setQuery(valor)
-    await store.searchItems()
+    await store.searchItems(1)
+  }
+
+  async function goToPage(page: number) {
+    await store.searchItems(page)
   }
 
   async function limpiar() {
@@ -22,6 +30,8 @@ export function useBuscador() {
   onMounted(() => {
     if (store.query) {
       void store.searchItems()
+    } else {
+      void store.fetchDefaultItems()
     }
   })
 
@@ -30,7 +40,12 @@ export function useBuscador() {
     items,
     loading,
     error,
+    currentPage,
+    totalCount,
+    pageSize,
+    totalPages,
     buscar,
+    goToPage,
     limpiar,
   }
 }

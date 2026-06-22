@@ -4,7 +4,7 @@ import { useRouter } from 'vue-router'
 import { useBuscador } from '../composable/useBuscador'
 
 const router = useRouter()
-const { query, items, loading, error, buscar, limpiar } = useBuscador()
+const { query, items, loading, error, buscar, limpiar, currentPage, totalPages, goToPage } = useBuscador()
 const localQuery = ref(query.value)
 
 function handleSubmit() {
@@ -18,6 +18,10 @@ function handleClear() {
 
 function irAlDetalle(id: number) {
   void router.push(`/games/${id}`)
+}
+
+function changePage(page: number) {
+  void goToPage(page)
 }
 </script>
 
@@ -105,9 +109,29 @@ function irAlDetalle(id: number) {
         </button>
       </div>
 
-      <a href="#" class="view-all">
-        Ver todos los resultados →
-      </a>
+      <!-- PAGINADOR -->
+      <div v-if="totalPages > 1" class="pagination">
+        <button
+          :disabled="currentPage === 1"
+          @click="changePage(currentPage - 1)"
+          class="pagination__btn pagination__btn--prev"
+        >
+          ← Anterior
+        </button>
+
+        <div class="pagination__info">
+          Página {{ currentPage }} de {{ totalPages }}
+        </div>
+
+        <button
+          :disabled="currentPage === totalPages"
+          @click="changePage(currentPage + 1)"
+          class="pagination__btn pagination__btn--next"
+        >
+          Siguiente →
+        </button>
+      </div>
+
     </section>
 
     <div
@@ -243,6 +267,44 @@ function irAlDetalle(id: number) {
   color: var(--color-brand);
   text-decoration: none;
   font-weight: bold;
+}
+
+/* PAGINADOR */
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 30px;
+  padding: 20px 0;
+}
+
+.pagination__info {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.pagination__btn {
+  padding: 10px 16px;
+  background: var(--color-brand);
+  color: var(--color-text);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+.pagination__btn:hover:not(:disabled) {
+  background: var(--color-brand-dark);
+}
+
+.pagination__btn:disabled {
+  background: var(--color-border-mid);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
 }
 
 /* RESPONSIVE */
