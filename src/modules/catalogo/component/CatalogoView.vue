@@ -214,4 +214,51 @@ function manejarToggleFavorito(gameId: number) {
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 20px;
 }
+
+@media (max-width: 1024px) {
+  .catalogo__sidebar {
+    width: 180px;
+    min-width: 180px;
+  }
+}
+
+@media (max-width: 640px) {
+  .catalogo {
+    flex-direction: column;
+  }
+
+  .catalogo__sidebar {
+    width: 100%;
+    min-width: unset;
+    border-right: none;
+    border-bottom: 1px solid #2a2a4a;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    overflow-x: auto;
+  }
+
+  .catalogo__sidebar-titulo {
+    display: none;
+  }
+
+  .catalogo__filtro-grupo {
+    margin-bottom: 0;
+    min-width: max-content;
+  }
+
+  .catalogo__filtro-lista {
+    flex-direction: row;
+  }
+
+  .catalogo__contenido {
+    padding: 16px;
+  }
+
+  .catalogo__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+}
 </style>
