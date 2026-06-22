@@ -8,6 +8,8 @@ import { pinia } from '@/stores'
 import CatalogoView from '../modules/catalogo/component/CatalogoView.vue'
 import HomeView from '@/modules/home/views/HomeView.vue'
 import PaginaDetalleJuego from '@/modules/detalle-juego/page/PaginaDetalleJuego.vue'
+import BuscadorPage from '@/modules/buscador/page/BuscadorPage.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,6 +20,7 @@ const router = createRouter({
     { path: '/perfil', component: PerfilPage, meta: { requiereAuth: true } },
     { path: '/games', component: CatalogoView },
     { path: '/games/:id', component: PaginaDetalleJuego },
+    { path: '/search', component: BuscadorPage },
   ],
 })
 
