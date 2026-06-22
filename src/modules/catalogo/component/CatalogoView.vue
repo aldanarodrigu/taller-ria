@@ -93,6 +93,26 @@ function manejarToggleFavorito(gameId: number) {
           </li>
         </ul>
       </div>
+
+      <div class="catalogo__filtro-grupo">
+        <h3 class="catalogo__filtro-titulo">Ordenar por</h3>
+        <ul class="catalogo__filtro-lista">
+          <li
+            class="catalogo__filtro-opcion"
+            :class="{ 'catalogo__filtro-opcion--activo': filtros.orden === '-rating' }"
+            @click="aplicarFiltro({ orden: '-rating' })"
+          >
+            Popularidad
+          </li>
+          <li
+            class="catalogo__filtro-opcion"
+            :class="{ 'catalogo__filtro-opcion--activo': filtros.orden === 'name' }"
+            @click="aplicarFiltro({ orden: 'name' })"
+          >
+            Nombre (A-Z)
+          </li>
+        </ul>
+      </div>
     </aside>
 
     <main class="catalogo__contenido">
