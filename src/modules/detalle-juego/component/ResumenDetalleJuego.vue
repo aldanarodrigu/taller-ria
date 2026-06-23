@@ -19,23 +19,41 @@ defineProps<DatosResumenDetalleJuego>()
 
     <div class="resumen-detalle-juego__bloques">
       <article class="resumen-detalle-juego__bloque">
-        <h2>Desarrolladoras</h2>
-        <ul>
-          <li v-for="desarrolladora in desarrolladoras" :key="desarrolladora">{{ desarrolladora }}</li>
+        <h2 class="resumen-detalle-juego__titulo">Desarrolladoras</h2>
+        <ul class="resumen-detalle-juego__lista">
+          <li
+            v-for="desarrolladora in desarrolladoras"
+            :key="desarrolladora"
+            class="resumen-detalle-juego__item"
+          >
+            {{ desarrolladora }}
+          </li>
         </ul>
       </article>
 
       <article class="resumen-detalle-juego__bloque">
-        <h2>Géneros</h2>
-        <ul>
-          <li v-for="genero in generos" :key="genero">{{ genero }}</li>
+        <h2 class="resumen-detalle-juego__titulo">Géneros</h2>
+        <ul class="resumen-detalle-juego__lista">
+          <li
+            v-for="genero in generos"
+            :key="genero"
+            class="resumen-detalle-juego__item"
+          >
+            {{ genero }}
+          </li>
         </ul>
       </article>
 
       <article class="resumen-detalle-juego__bloque">
-        <h2>Etiquetas</h2>
-        <ul>
-          <li v-for="etiqueta in etiquetas" :key="etiqueta">{{ etiqueta }}</li>
+        <h2 class="resumen-detalle-juego__titulo">Etiquetas</h2>
+        <ul class="resumen-detalle-juego__lista">
+          <li
+            v-for="etiqueta in etiquetas"
+            :key="etiqueta"
+            class="resumen-detalle-juego__item"
+          >
+            {{ etiqueta }}
+          </li>
         </ul>
       </article>
     </div>
@@ -45,58 +63,62 @@ defineProps<DatosResumenDetalleJuego>()
 <style scoped>
 .resumen-detalle-juego {
   display: grid;
-  gap: 1rem;
+  gap: 16px;
 }
 
 .resumen-detalle-juego__datos {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 12px;
 }
 
 .resumen-detalle-juego__tarjeta,
 .resumen-detalle-juego__bloque {
-  padding: 1rem;
-  background: var(--color-bg-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 1rem;
+  padding: 16px;
+  border: 1px solid #1e2433;
+  border-radius: 16px;
+  background: #161b27;
 }
 
 .resumen-detalle-juego__etiqueta {
-  color: var(--color-text-muted);
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  color: #8892a4;
+  font-size: 13px;
 }
 
 .resumen-detalle-juego__valor {
-  margin-top: 0.35rem;
-  font-family: var(--font-display);
-  font-size: 1.5rem;
+  margin-top: 6px;
+  font-size: 24px;
 }
 
 .resumen-detalle-juego__bloques {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
 }
 
-.resumen-detalle-juego__bloque h2 {
-  margin-bottom: 0.75rem;
-  font-size: 1rem;
+.resumen-detalle-juego__titulo {
+  margin-bottom: 12px;
+  font-size: 20px;
 }
 
-.resumen-detalle-juego__bloque ul {
+.resumen-detalle-juego__lista {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 8px;
 }
 
-.resumen-detalle-juego__bloque li {
-  padding: 0.35rem 0.7rem;
-  border-radius: 999px;
-  background: rgba(124, 58, 237, 0.16);
+.resumen-detalle-juego__item {
+  padding: 6px 10px;
+  border: 1px solid #2d3548;
+  border-radius: 10px;
   color: #d9d2ff;
-  font-size: 0.88rem;
+  font-size: 14px;
+}
+
+@media (max-width: 720px) {
+  .resumen-detalle-juego__datos,
+  .resumen-detalle-juego__bloques {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

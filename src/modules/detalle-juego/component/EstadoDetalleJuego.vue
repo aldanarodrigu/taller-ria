@@ -30,30 +30,29 @@ const emit = defineEmits<{
 <style scoped>
 .estado-detalle-juego {
   display: grid;
-  gap: 0.75rem;
-  padding: 2rem;
-  background: var(--color-bg-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 1rem;
+  gap: 12px;
+  padding: 32px;
+  border: 1px solid #1e2433;
+  border-radius: 16px;
+  background: #161b27;
   text-align: center;
 }
 
 .estado-detalle-juego__titulo {
-  font-family: var(--font-display);
-  font-size: 1.75rem;
-  color: var(--color-text);
+  color: #e2e8f0;
+  font-size: 28px;
 }
 
 .estado-detalle-juego__mensaje {
-  color: var(--color-text-muted);
+  color: #8892a4;
   line-height: 1.6;
 }
 
 .estado-detalle-juego__boton {
   justify-self: center;
-  padding: 0.75rem 1.2rem;
-  border-radius: 999px;
-  background: linear-gradient(135deg, var(--color-brand), var(--color-brand-alt));
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: #7c3aed;
   color: #fff;
   font-weight: 700;
 }

@@ -7,7 +7,7 @@ defineProps<DatosDescripcionDetalleJuego>()
 <template>
   <section class="descripcion-detalle-juego">
     <div class="descripcion-detalle-juego__encabezado">
-      <h2>Descripción</h2>
+      <h2 class="descripcion-detalle-juego__titulo">Descripción</h2>
       <a
         v-if="sitioWeb"
         :href="sitioWeb"
@@ -26,22 +26,22 @@ defineProps<DatosDescripcionDetalleJuego>()
 <style scoped>
 .descripcion-detalle-juego {
   display: grid;
-  gap: 1rem;
-  padding: 1.25rem;
-  background: var(--color-bg-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 1rem;
+  gap: 16px;
+  padding: 20px;
+  border: 1px solid #1e2433;
+  border-radius: 16px;
+  background: #161b27;
 }
 
 .descripcion-detalle-juego__encabezado {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 16px;
 }
 
-.descripcion-detalle-juego__encabezado h2 {
-  font-size: 1.1rem;
+.descripcion-detalle-juego__titulo {
+  font-size: 20px;
 }
 
 .descripcion-detalle-juego__enlace {
@@ -50,8 +50,8 @@ defineProps<DatosDescripcionDetalleJuego>()
 }
 
 .descripcion-detalle-juego__texto {
-  color: var(--color-text-muted);
-  line-height: 1.75;
+  color: #8892a4;
+  line-height: 1.7;
   white-space: pre-line;
 }
 

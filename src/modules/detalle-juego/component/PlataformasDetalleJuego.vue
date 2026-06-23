@@ -9,8 +9,8 @@ defineProps<{
 <template>
   <section class="plataformas-detalle-juego">
     <div class="plataformas-detalle-juego__encabezado">
-      <h2>Plataformas</h2>
-      <p>{{ plataformas.length }} disponibles</p>
+      <h2 class="plataformas-detalle-juego__titulo">Plataformas</h2>
+      <p class="plataformas-detalle-juego__cantidad">{{ plataformas.length }} disponibles</p>
     </div>
 
     <div v-if="plataformas.length" class="plataformas-detalle-juego__lista">
@@ -19,12 +19,12 @@ defineProps<{
         :key="plataforma.id"
         class="plataformas-detalle-juego__tarjeta"
       >
-        <h3>{{ plataforma.nombre }}</h3>
+        <h3 class="plataformas-detalle-juego__nombre">{{ plataforma.nombre }}</h3>
         <p class="plataformas-detalle-juego__fecha">{{ plataforma.fechaLanzamiento }}</p>
-        <p v-if="plataforma.requisitosMinimos">
+        <p v-if="plataforma.requisitosMinimos" class="plataformas-detalle-juego__requisito">
           <strong>Mínimos:</strong> {{ plataforma.requisitosMinimos }}
         </p>
-        <p v-if="plataforma.requisitosRecomendados">
+        <p v-if="plataforma.requisitosRecomendados" class="plataformas-detalle-juego__requisito">
           <strong>Recomendados:</strong> {{ plataforma.requisitosRecomendados }}
         </p>
         <p
@@ -45,42 +45,43 @@ defineProps<{
 <style scoped>
 .plataformas-detalle-juego {
   display: grid;
-  gap: 1rem;
+  gap: 16px;
 }
 
 .plataformas-detalle-juego__encabezado {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 16px;
 }
 
-.plataformas-detalle-juego__encabezado p,
+.plataformas-detalle-juego__titulo,
+.plataformas-detalle-juego__nombre {
+  font-size: 20px;
+}
+
+.plataformas-detalle-juego__cantidad,
 .plataformas-detalle-juego__fecha,
 .plataformas-detalle-juego__sin-requisitos,
 .plataformas-detalle-juego__vacio {
-  color: var(--color-text-muted);
+  color: #8892a4;
 }
 
 .plataformas-detalle-juego__lista {
   display: grid;
-  gap: 0.75rem;
+  gap: 12px;
 }
 
 .plataformas-detalle-juego__tarjeta {
   display: grid;
-  gap: 0.75rem;
-  padding: 1rem;
-  background: var(--color-bg-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 1rem;
+  gap: 12px;
+  padding: 16px;
+  border: 1px solid #1e2433;
+  border-radius: 16px;
+  background: #161b27;
 }
 
-.plataformas-detalle-juego__tarjeta h3 {
-  font-size: 1rem;
-}
-
-.plataformas-detalle-juego__tarjeta p {
+.plataformas-detalle-juego__requisito {
   line-height: 1.6;
 }
 </style>

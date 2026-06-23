@@ -33,11 +33,15 @@ function volverPaginaAnterior() {
     <header class="pagina-detalle-juego__encabezado">
       <div>
         <p class="pagina-detalle-juego__eyebrow">RAWG</p>
-        <h1>Detalle del juego</h1>
+        <h1 class="pagina-detalle-juego__titulo">Detalle del juego</h1>
       </div>
 
       <div class="pagina-detalle-juego__acciones">
-        <button type="button" class="pagina-detalle-juego__boton pagina-detalle-juego__boton--secundario" @click="volverPaginaAnterior">
+        <button
+          type="button"
+          class="pagina-detalle-juego__boton pagina-detalle-juego__boton--secundario"
+          @click="volverPaginaAnterior"
+        >
           Volver
         </button>
       </div>
@@ -80,64 +84,55 @@ function volverPaginaAnterior() {
 <style scoped>
 .pagina-detalle-juego {
   display: grid;
-  gap: 1.5rem;
-  min-height: 100vh;
-  padding: 1.5rem;
-  background:
-    linear-gradient(180deg, rgba(79, 70, 229, 0.08), transparent 24%),
-    var(--color-bg);
+  gap: 24px;
+  padding: 24px;
 }
 
 .pagina-detalle-juego__encabezado {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 16px;
 }
 
 .pagina-detalle-juego__acciones {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 12px;
   justify-content: flex-end;
 }
 
 .pagina-detalle-juego__eyebrow {
-  color: #b8c1d8;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-size: 0.75rem;
+  color: #8892a4;
+  font-size: 13px;
 }
 
-.pagina-detalle-juego__encabezado h1 {
-  margin-top: 0.25rem;
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 2.8rem);
+.pagina-detalle-juego__titulo {
+  margin-top: 4px;
+  font-size: 36px;
 }
 
 .pagina-detalle-juego__boton {
-  padding: 0.8rem 1.2rem;
-  border-radius: 999px;
-  background: rgba(124, 58, 237, 0.18);
-  border: 1px solid rgba(124, 58, 237, 0.45);
-  color: var(--color-text);
+  padding: 12px 16px;
+  border-radius: 10px;
   font-weight: 700;
 }
 
 .pagina-detalle-juego__boton--secundario {
-  background: rgba(22, 27, 39, 0.8);
-  border-color: var(--color-border-mid);
+  border: 1px solid #2d3548;
+  background: #0d0f14;
+  color: #e2e8f0;
 }
 
 .pagina-detalle-juego__contenido,
 .pagina-detalle-juego__grilla {
   display: grid;
-  gap: 1.25rem;
+  gap: 20px;
 }
 
 @media (max-width: 720px) {
   .pagina-detalle-juego {
-    padding: 1rem;
+    padding: 16px;
   }
 
   .pagina-detalle-juego__encabezado {
@@ -148,6 +143,10 @@ function volverPaginaAnterior() {
   .pagina-detalle-juego__acciones {
     width: 100%;
     justify-content: flex-start;
+  }
+
+  .pagina-detalle-juego__boton {
+    width: 100%;
   }
 }
 </style>
