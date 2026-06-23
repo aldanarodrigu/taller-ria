@@ -58,14 +58,11 @@ watch(
 
 <template>
   <section class="formulario-auth">
-    <div class="formulario-auth__decoracion formulario-auth__decoracion--izquierda" />
-    <div class="formulario-auth__decoracion formulario-auth__decoracion--derecha" />
-
     <div class="formulario-auth__contenedor">
       <header class="formulario-auth__encabezado">
         <p class="formulario-auth__eyebrow">gameXplorer</p>
-        <h1>{{ titulo }}</h1>
-        <p>{{ subtitulo }}</p>
+        <h1 class="formulario-auth__titulo">{{ titulo }}</h1>
+        <p class="formulario-auth__subtitulo">{{ subtitulo }}</p>
       </header>
 
       <p v-if="error" class="formulario-auth__error">{{ error }}</p>
@@ -76,9 +73,10 @@ watch(
           :key="campo.clave"
           class="formulario-auth__campo"
         >
-          <span>{{ campo.etiqueta }}</span>
+          <span class="formulario-auth__campo-label">{{ campo.etiqueta }}</span>
           <input
             v-model="valoresFormulario[campo.clave]"
+            class="formulario-auth__input"
             :type="campo.tipo"
             :name="campo.clave"
             :autocomplete="campo.autocomplete"
@@ -99,7 +97,7 @@ watch(
 
       <footer class="formulario-auth__pie">
         <span>{{ textoSecundario }}</span>
-        <RouterLink :to="rutaLink">{{ textoLink }}</RouterLink>
+        <RouterLink class="formulario-auth__link" :to="rutaLink">{{ textoLink }}</RouterLink>
       </footer>
     </div>
   </section>
@@ -107,148 +105,90 @@ watch(
 
 <style scoped>
 .formulario-auth {
-  position: relative;
-  min-height: 100vh;
-  overflow: hidden;
-  display: grid;
-  place-items: center;
-  padding: 2rem 1.25rem;
-  background:
-    radial-gradient(circle at top, rgba(79, 70, 229, 0.22), transparent 30%),
-    linear-gradient(180deg, #090b10 0%, #0d0f14 100%);
-}
-
-.formulario-auth__decoracion {
-  position: absolute;
-  width: 18rem;
-  height: 18rem;
-  border-radius: 999px;
-  filter: blur(18px);
-  opacity: 0.22;
-}
-
-.formulario-auth__decoracion--izquierda {
-  top: 10%;
-  left: -4rem;
-  background: #4f46e5;
-}
-
-.formulario-auth__decoracion--derecha {
-  right: -5rem;
-  bottom: 8%;
-  background: #7c3aed;
+  padding: 60px 20px;
 }
 
 .formulario-auth__contenedor {
-  position: relative;
-  z-index: 1;
-  width: min(100%, 28rem);
-  padding: 2rem;
-  border: 1px solid rgba(124, 58, 237, 0.24);
-  border-radius: 24px;
-  background: rgba(12, 15, 22, 0.92);
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.32);
-  backdrop-filter: blur(18px);
+  max-width: 450px;
+  margin: 0 auto;
+  padding: 32px;
+  border: 1px solid #1e2433;
+  border-radius: 16px;
+  background: #161b27;
+}
+
+.formulario-auth__encabezado,
+.formulario-auth__formulario {
+  display: grid;
+  gap: 16px;
 }
 
 .formulario-auth__encabezado {
-  display: grid;
-  gap: 0.65rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 24px;
 }
 
 .formulario-auth__eyebrow {
-  color: #a78bfa;
-  font-size: 0.78rem;
+  color: #7c3aed;
+  font-size: 13px;
   font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
 }
 
-.formulario-auth__encabezado h1 {
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 2.75rem);
-  letter-spacing: 0.02em;
+.formulario-auth__titulo {
+  font-size: 34px;
 }
 
-.formulario-auth__encabezado p {
-  color: var(--color-text-muted);
-  line-height: 1.5;
+.formulario-auth__subtitulo,
+.formulario-auth__pie {
+  color: #8892a4;
 }
 
 .formulario-auth__error {
-  margin-bottom: 1rem;
-  padding: 0.85rem 1rem;
-  border: 1px solid rgba(248, 113, 113, 0.35);
-  border-radius: 14px;
-  background: rgba(127, 29, 29, 0.25);
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  border: 1px solid #ef4444;
+  border-radius: 10px;
+  background: #3a1515;
   color: #fecaca;
-  font-size: 0.95rem;
-}
-
-.formulario-auth__formulario {
-  display: grid;
-  gap: 1rem;
+  font-size: 15px;
 }
 
 .formulario-auth__campo {
   display: grid;
-  gap: 0.45rem;
+  gap: 8px;
 }
 
-.formulario-auth__campo span {
-  color: var(--color-text);
-  font-size: 0.92rem;
+.formulario-auth__campo-label {
+  font-size: 15px;
   font-weight: 600;
 }
 
-.formulario-auth__campo input {
+.formulario-auth__input {
   width: 100%;
-  padding: 0.95rem 1rem;
-  border: 1px solid var(--color-border-mid);
-  border-radius: 14px;
-  background: rgba(22, 27, 39, 0.88);
-  color: var(--color-text);
-  font-size: 0.98rem;
-  transition:
-    border-color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  padding: 14px 16px;
+  border: 1px solid #2d3548;
+  border-radius: 10px;
+  background: #0d0f14;
+  color: #e2e8f0;
+  font-size: 16px;
 }
 
-.formulario-auth__campo input::placeholder {
-  color: #64748b;
-}
-
-.formulario-auth__campo input:focus {
+.formulario-auth__input:focus {
   outline: none;
-  border-color: rgba(124, 58, 237, 0.8);
-  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.14);
-  transform: translateY(-1px);
+  border-color: #7c3aed;
 }
 
-.formulario-auth__campo input:disabled {
-  opacity: 0.7;
+.formulario-auth__input:disabled {
+  opacity: 0.65;
 }
 
 .formulario-auth__boton {
-  margin-top: 0.5rem;
-  padding: 0.95rem 1rem;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  margin-top: 8px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  background: #7c3aed;
   color: #f8fafc;
   font-weight: 700;
-  font-size: 0.98rem;
-  letter-spacing: 0.01em;
-  transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease,
-    opacity 0.2s ease;
-}
-
-.formulario-auth__boton:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 16px 28px rgba(79, 70, 229, 0.3);
+  font-size: 16px;
 }
 
 .formulario-auth__boton:disabled {
@@ -259,22 +199,24 @@ watch(
 .formulario-auth__pie {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.35rem;
+  gap: 6px;
   justify-content: center;
-  margin-top: 1.5rem;
-  color: var(--color-text-muted);
+  margin-top: 24px;
   text-align: center;
 }
 
-.formulario-auth__pie a {
+.formulario-auth__link {
   color: #c4b5fd;
   font-weight: 700;
 }
 
 @media (max-width: 640px) {
+  .formulario-auth {
+    padding: 24px 16px;
+  }
+
   .formulario-auth__contenedor {
-    padding: 1.5rem;
-    border-radius: 20px;
+    padding: 24px;
   }
 }
 </style>

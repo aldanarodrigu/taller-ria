@@ -58,7 +58,7 @@ function manejarToggleFavorito(id: number) {
 </script>
 
 <template>
-  <section class="pagina-perfil">
+  <section>
     <Navbar />
 
     <PerfilView
@@ -83,13 +83,3 @@ function manejarToggleFavorito(id: number) {
     />
   </section>
 </template>
-
-<style scoped>
-.pagina-perfil {
-  min-height: 100vh;
-  background:
-    radial-gradient(circle at top left, rgba(79, 70, 229, 0.16), transparent 28%),
-    radial-gradient(circle at bottom right, rgba(124, 58, 237, 0.14), transparent 24%),
-    linear-gradient(180deg, #090b10 0%, #0d0f14 100%);
-}
-</style>
