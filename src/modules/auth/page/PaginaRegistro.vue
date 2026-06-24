@@ -28,7 +28,7 @@ function manejarRegistro(datos: DatosRegistro) {
     registrarse(datos)
     void router.push('/')
   } catch {
-    // El store ya publica el error para la vista.
+    // El store ya publica el error para la vista
   }
 }
 
