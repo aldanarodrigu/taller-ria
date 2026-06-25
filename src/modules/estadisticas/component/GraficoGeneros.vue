@@ -33,7 +33,10 @@ const chartData = computed<ChartData<'bar'>>(() => ({
 }))
 
 const chartOptions: ChartOptions<'bar'> = {
-  animation: false,
+  animation: {
+    duration: 2000,
+    easing: 'easeInOutBack',
+  },
   maintainAspectRatio: false,
   responsive: true,
   plugins: {
