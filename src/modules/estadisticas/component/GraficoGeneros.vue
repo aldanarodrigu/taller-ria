@@ -79,12 +79,14 @@ const descripcionGrafico = computed(() =>
     </header>
 
     <div class="grafico-generos__contenedor">
-      <Bar
-        :aria-label="descripcionGrafico"
-        :data="chartData"
-        :options="chartOptions"
-        role="img"
-      />
+      <div class="grafico-generos__canvas">
+        <Bar
+          :aria-label="descripcionGrafico"
+          :data="chartData"
+          :options="chartOptions"
+          role="img"
+        />
+      </div>
     </div>
   </section>
 </template>
@@ -109,6 +111,11 @@ const descripcionGrafico = computed(() =>
 }
 
 .grafico-generos__contenedor {
+  overflow-x: auto;
+}
+
+.grafico-generos__canvas {
+  min-width: 720px;
   height: 420px;
 }
 
@@ -117,7 +124,7 @@ const descripcionGrafico = computed(() =>
     padding: 16px;
   }
 
-  .grafico-generos__contenedor {
+  .grafico-generos__canvas {
     height: 460px;
   }
 }
