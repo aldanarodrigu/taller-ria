@@ -74,8 +74,7 @@ const descripcionGrafico = computed(() =>
 <template>
   <section class="grafico-generos">
     <header class="grafico-generos__encabezado">
-      <h2 class="grafico-generos__titulo">Juegos por genero</h2>
-      <p class="grafico-generos__descripcion">Top 8 segun cantidad de juegos.</p>
+      <h2 class="grafico-generos__titulo">Cantidad de juegos por generos</h2>
     </header>
 
     <div class="grafico-generos__contenedor">

@@ -20,7 +20,7 @@ const listaGeneros = computed(() => props.generos?.results ?? [])
 const generosOrdenados = computed(() =>
   [...listaGeneros.value].sort((actual, siguiente) => siguiente.games_count - actual.games_count),
 )
-const generosPrincipales = computed(() => generosOrdenados.value.slice(0, 8))
+const generosPrincipales = computed(() => generosOrdenados.value.slice(0, 19))
 const generoConMasJuegos = computed(() => generosOrdenados.value[0] ?? null)
 const cantidadGeneros = computed(() => props.generos?.count ?? listaGeneros.value.length)
 const totalJuegos = computed(() =>
