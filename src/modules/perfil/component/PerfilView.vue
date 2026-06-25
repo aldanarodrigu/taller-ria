@@ -77,7 +77,7 @@ function manejarRestablecer() {
           <p class="perfil-module__eyebrow">Cuenta</p>
           <h1 class="perfil-module__titulo">Perfil</h1>
           <p class="perfil-module__subtitulo">
-            Actualiza la informacion basica de tu cuenta y mantenela sincronizada en este navegador.
+            Actualiza la informacion basica de tu cuenta
           </p>
         </div>
 
@@ -107,7 +107,7 @@ function manejarRestablecer() {
             <p class="perfil-module__resumen-label">Cuenta activa</p>
             <p class="perfil-module__nickname">@{{ nickname || 'sin-nickname' }}</p>
             <p class="perfil-module__resumen-copy">
-              Tu nickname se usa para iniciar sesion y por ahora no se puede editar desde esta pantalla.
+              Tu nickname para iniciar sesion
             </p>
           </div>
 
