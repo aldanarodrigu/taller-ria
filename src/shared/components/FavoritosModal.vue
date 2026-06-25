@@ -40,140 +40,137 @@ onBeforeUnmount(() => {
 
 <template>
   <Teleport to="body">
-    <Transition name="favoritos-modal">
-      <div
-        v-if="abierto"
-        class="favoritos-modal"
-        @click.self="emit('cerrar')"
+    <div
+      v-if="abierto"
+      class="favoritos-modal"
+      @click.self="emit('cerrar')"
+    >
+      <section
+        class="favoritos-modal__dialogo"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="favoritos-modal-title"
       >
-        <section
-          class="favoritos-modal__dialog"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="favoritos-modal-title"
-        >
-          <header class="favoritos-modal__header">
-            <div>
-              <p class="favoritos-modal__eyebrow">Tu biblioteca</p>
-              <h2 id="favoritos-modal-title" class="favoritos-modal__title">Juegos favoritos</h2>
-              <p class="favoritos-modal__description">
-                Revisa tus juegos guardados, quitalos de favoritos o entra directo al detalle.
-              </p>
-            </div>
+        <header class="favoritos-modal__encabezado">
+          <div>
+            <h2 id="favoritos-modal-title" class="favoritos-modal__titulo">Juegos favoritos</h2>
+            <p class="favoritos-modal__descripcion">
+              Revisa tus juegos guardados, quitalos de favoritos o entra directo al detalle.
+            </p>
+          </div>
 
-            <button
-              type="button"
-              class="favoritos-modal__close"
-              aria-label="Cerrar favoritos"
-              @click="emit('cerrar')"
-            >
-              Cerrar
-            </button>
-          </header>
+          <button
+            type="button"
+            class="favoritos-modal__boton"
+            aria-label="Cerrar favoritos"
+            @click="emit('cerrar')"
+          >
+            Cerrar
+          </button>
+        </header>
 
+        <div class="favoritos-modal__cuerpo">
           <FavoritosPanel
             :error="error"
-          :items="items"
-          :loading="loading"
-          empty-description="Marca juegos con el corazon para encontrarlos rapido desde aqui."
-          empty-title="Tu lista de favoritos esta vacia"
-          @seleccionar="emit('seleccionar', $event)"
-          @toggle-favorito="emit('toggleFavorito', $event)"
-        />
+            :items="items"
+            :loading="loading"
+            empty-description="Marca juegos con el corazon para encontrarlos rapido desde aqui."
+            empty-title="Tu lista de favoritos esta vacia"
+            @seleccionar="emit('seleccionar', $event)"
+            @toggle-favorito="emit('toggleFavorito', $event)"
+          />
+        </div>
       </section>
-      </div>
-    </Transition>
+    </div>
   </Teleport>
 </template>
 
 <style scoped>
 .favoritos-modal {
   position: fixed;
-  inset: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   z-index: 120;
-  display: grid;
-  place-items: center;
-  padding: 1.25rem;
-  background: rgba(3, 7, 18, 0.76);
-  backdrop-filter: blur(8px);
-}
-
-.favoritos-modal__dialog {
-  width: min(100%, 64rem);
-  max-height: min(85vh, 48rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: auto;
-  padding: 1.35rem;
-  border: 1px solid rgba(124, 58, 237, 0.28);
-  border-radius: 24px;
-  background:
-    radial-gradient(circle at top right, rgba(79, 70, 229, 0.14), transparent 26%),
-    rgba(7, 10, 18, 0.97);
-  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.38);
+  padding: 20px;
+  /* El fondo oscuro deja claro que el modal aparece sobre otra pantalla. */
+  background: #05070d99;
 }
 
-.favoritos-modal__header {
+.favoritos-modal__dialogo {
+  width: 100%;
+  max-width: 960px;
+  max-height: 720px;
+  overflow: auto;
+  padding: 24px;
+  border: 2px solid #7c3aed;
+  border-radius: 8px;
+  background: #161b27;
+  box-shadow: 0 16px 40px #000000;
+}
+
+.favoritos-modal__encabezado {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e2433;
 }
 
-.favoritos-modal__eyebrow {
-  color: #a78bfa;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+.favoritos-modal__titulo {
+  margin: 0;
+  color: #e2e8f0;
+  font-size: 28px;
 }
 
-.favoritos-modal__title {
-  margin-top: 0.35rem;
-  font-family: var(--font-display);
-  font-size: clamp(1.7rem, 4vw, 2.2rem);
-  color: var(--color-text);
+.favoritos-modal__descripcion {
+  margin: 6px 0 0;
+  color: #8892a4;
+  font-size: 15px;
+  line-height: 1.5;
 }
 
-.favoritos-modal__description {
-  margin-top: 0.45rem;
-  color: var(--color-text-muted);
-  line-height: 1.55;
+.favoritos-modal__boton {
+  padding: 10px 14px;
+  border: 1px solid #1e2433;
+  border-radius: 8px;
+  background: #0d0f14;
+  color: #e2e8f0;
+  cursor: pointer;
 }
 
-.favoritos-modal__close {
-  padding: 0.8rem 1rem;
-  border: 1px solid var(--color-border-mid);
-  border-radius: 12px;
-  background: rgba(22, 27, 39, 0.72);
-  color: var(--color-text);
-}
-
-.favoritos-modal-enter-active,
-.favoritos-modal-leave-active {
-  transition: opacity 0.2s ease;
-}
-
-.favoritos-modal-enter-from,
-.favoritos-modal-leave-to {
-  opacity: 0;
+.favoritos-modal__cuerpo {
+  max-height: 540px;
+  overflow: auto;
+  padding: 16px;
+  border: 1px solid #1e2433;
+  border-radius: 8px;
+  background: #0d0f14;
 }
 
 @media (max-width: 640px) {
   .favoritos-modal {
-    padding: 0.75rem;
+    align-items: flex-start;
+    padding: 12px;
   }
 
-  .favoritos-modal__dialog {
-    padding: 1rem;
-    border-radius: 20px;
+  .favoritos-modal__dialogo {
+    padding: 16px;
   }
 
-  .favoritos-modal__header {
+  .favoritos-modal__encabezado {
     flex-direction: column;
   }
 
-  .favoritos-modal__close {
-    width: 100%;
+  .favoritos-modal__cuerpo {
+    padding: 12px;
   }
 }
 </style>
