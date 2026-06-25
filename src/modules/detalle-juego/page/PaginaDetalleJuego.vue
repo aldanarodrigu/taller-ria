@@ -8,6 +8,7 @@ import PlataformasDetalleJuego from '../component/PlataformasDetalleJuego.vue'
 import ResumenDetalleJuego from '../component/ResumenDetalleJuego.vue'
 import TiendasDetalleJuego from '../component/TiendasDetalleJuego.vue'
 import { useDetalleJuego } from '../composable/useDetalleJuego'
+import Navbar from '@/shared/components/Navbar.vue'
 
 const router = useRouter()
 const {
@@ -29,6 +30,8 @@ function volverPaginaAnterior() {
 </script>
 
 <template>
+  <Navbar />
+
   <section class="pagina-detalle-juego">
     <header class="pagina-detalle-juego__encabezado">
       <div>

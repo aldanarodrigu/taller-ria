@@ -47,16 +47,15 @@ const chartOptions: ChartOptions<'bar'> = {
   scales: {
     x: {
       grid: {
-        display: false,
+        color: '#1e2433',
       },
       ticks: {
         color: '#8892a4',
       },
     },
     y: {
-      beginAtZero: true,
       grid: {
-        color: '#1e2433',
+        display: false,
       },
       ticks: {
         color: '#8892a4',
@@ -110,7 +109,7 @@ const descripcionGrafico = computed(() =>
 }
 
 .grafico-generos__contenedor {
-  height: 360px;
+  height: 420px;
 }
 
 @media (max-width: 640px) {
@@ -119,7 +118,7 @@ const descripcionGrafico = computed(() =>
   }
 
   .grafico-generos__contenedor {
-    height: 280px;
+    height: 460px;
   }
 }
 </style>

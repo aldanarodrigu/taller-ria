@@ -43,10 +43,9 @@ function formatearNumero(valor: number): string {
       <button
         type="button"
         class="estadisticas-module__boton"
-        :disabled="loading"
         @click="emit('back')"
       >
-        {{ loading ? 'Cargando...' : 'Atras' }}
+        Volver
       </button>
     </header>
 
@@ -105,11 +104,6 @@ function formatearNumero(valor: number): string {
   font-weight: 700;
 }
 
-.estadisticas-module__boton:disabled {
-  cursor: not-allowed;
-  opacity: 0.65;
-}
-
 .estadisticas-module__estado,
 .estadisticas-module__mensaje {
   padding: 16px;
@@ -165,7 +159,7 @@ function formatearNumero(valor: number): string {
   }
 
   .estadisticas-module__boton {
-    width: 100%;
+    align-self: flex-start;
   }
 
   .estadisticas-module__resumen {
