@@ -30,6 +30,7 @@ const navItems = computed<NavItem[]>(() => [
   { label: 'Juegos', route: '/games' },
   { label: 'Generos' },
   { label: 'Plataformas' },
+  { label: 'Estadisticas', route: '/estadisticas' },
   ...(usuarioActual.value ? [{ label: 'Favoritos', action: 'favoritos' as const }] : []),
 ])
 const {

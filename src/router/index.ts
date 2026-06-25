@@ -9,6 +9,7 @@ import CatalogoView from '../modules/catalogo/component/CatalogoView.vue'
 import HomeView from '@/modules/home/views/HomeView.vue'
 import PaginaDetalleJuego from '@/modules/detalle-juego/page/PaginaDetalleJuego.vue'
 import BuscadorPage from '@/modules/buscador/page/BuscadorPage.vue'
+import EstadisticasPage from '@/modules/estadisticas/page/EstadisticasPage.vue'
 
 
 const router = createRouter({
@@ -21,6 +22,7 @@ const router = createRouter({
     { path: '/games', component: CatalogoView },
     { path: '/games/:id', component: PaginaDetalleJuego },
     { path: '/search', component: BuscadorPage },
+    { path: '/estadisticas', component: EstadisticasPage },
   ],
 })
 
