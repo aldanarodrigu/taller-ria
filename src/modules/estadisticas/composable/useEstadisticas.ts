@@ -10,20 +10,21 @@ export function useEstadisticas() {
   const error = computed(() => store.error)
   const generos = computed(() => store.generos)
 
-  async function getGeneros() {
-    store.getGeneros()
+  async function reload() {
+    await store.getGeneros()
   }
 
   onMounted(() => {
-    getGeneros()
+    void reload()
   })
 
   return {
     error,
-    items,
-    loading,
-    store,
-    getGeneros,
     generos,
+    getGeneros: reload,
+    loading,
+    reload,
+    store,
+    items,
   }
 }

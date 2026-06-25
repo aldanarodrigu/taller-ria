@@ -30,6 +30,9 @@ npm install
 
 -- Para libreria de avatars
 npm install @dicebear/core @dicebear/styles --save
+
+-- Para graficas
+npm i vue-chartjs chart.js
 ```
 
 ### Compile and Hot-Reload for Development

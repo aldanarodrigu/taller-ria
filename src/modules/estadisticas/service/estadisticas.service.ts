@@ -6,14 +6,14 @@ import type { EstadisticasGeneroResponse } from '../type/estadisticas.types'
  */
 export async function getEstadisticasGenero() {
   const params = new URLSearchParams()
-    params.set('key', estadisticasConfig.apiKey)
+  params.set('key', estadisticasConfig.apiKey)
 
-    const response = await fetch(`${estadisticasConfig.baseUrl}/genres${params.toString()}`)
-    if (!response.ok) {
-      throw new Error('No se pudieron cargar los datos del juego: ' + response.status)
-    }
+  const response = await fetch(`${estadisticasConfig.baseUrl}/genres?${params.toString()}`)
+  if (!response.ok) {
+    throw new Error('No se pudieron cargar los datos de estadisticas: ' + response.status)
+  }
 
-    return (await response.json()) as EstadisticasGeneroResponse
+  return (await response.json()) as EstadisticasGeneroResponse
 }
 
 // exportamos el service asi llamamos una vez el service
