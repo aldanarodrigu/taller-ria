@@ -286,11 +286,11 @@ function manejarToggleFavorito(gameId: number) {
     min-width: unset;
     border-right: none;
     border-bottom: 1px solid #2a2a4a;
-    padding: 12px 16px;
+    padding: 8px 0;
     display: flex;
-    flex-direction: row;
-    gap: 24px;
-    overflow-x: auto;
+    flex-direction: column;
+    gap: 0;
+    overflow: visible;
   }
 
   .catalogo__sidebar-titulo {
@@ -299,11 +299,47 @@ function manejarToggleFavorito(gameId: number) {
 
   .catalogo__filtro-grupo {
     margin-bottom: 0;
-    min-width: max-content;
+    padding: 6px 0;
+    position: relative;
+  }
+
+  .catalogo__filtro-grupo::after {
+    content: '›';
+    position: absolute;
+    right: 0;
+    bottom: 6px;
+    width: 40px;
+    height: 32px;
+    background: linear-gradient(to right, transparent, #12122a 70%);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 8px;
+    color: #7c3aed;
+    font-size: 1.1rem;
+    pointer-events: none;
+  }
+
+  .catalogo__filtro-titulo {
+    padding: 0 16px;
   }
 
   .catalogo__filtro-lista {
     flex-direction: row;
+    overflow-x: auto;
+    padding: 4px 16px;
+    gap: 8px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .catalogo__filtro-lista::-webkit-scrollbar {
+    display: none;
+  }
+
+  .catalogo__filtro-opcion {
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .catalogo__contenido {
