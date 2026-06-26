@@ -22,6 +22,7 @@ const router = useRouter()
 const route = useRoute()
 const { cerrarSesion, favoritos, hidratarSesion, inicializado, toggleFavorito, usuarioActual } = useAutenticacion()
 const menuAbierto = ref(false)
+const menuNavAbierto = ref(false)
 const modalFavoritosAbierto = ref(false)
 const contenedorPerfil = ref<HTMLElement | null>(null)
 const favoritosHabilitados = computed(() => modalFavoritosAbierto.value && Boolean(usuarioActual.value))
@@ -44,6 +45,10 @@ function cerrarMenu(): void {
   menuAbierto.value = false
 }
 
+function toggleMenuNav(): void {
+  menuNavAbierto.value = !menuNavAbierto.value
+}
+
 function cerrarFavoritos(): void {
   modalFavoritosAbierto.value = false
 }
@@ -58,6 +63,7 @@ function abrirFavoritos(): void {
 }
 
 function navegar(item: NavItem): void {
+  menuNavAbierto.value = false
   if (item.action === 'favoritos') {
     abrirFavoritos()
     return
@@ -152,7 +158,7 @@ onBeforeUnmount(() => {
   <header class="header">
     <div class="header-logo">gameXplorer</div>
 
-    <nav class="header-nav">
+    <nav class="header-nav" :class="{ 'header-nav--abierto': menuNavAbierto }">
       <a
         v-for="item in navItems"
         :key="item.label"
@@ -168,6 +174,16 @@ onBeforeUnmount(() => {
     <div class="header-search">
       <!-- aca el buscador -->
     </div>
+
+    <button
+      class="header-hamburguesa"
+      aria-label="Abrir menú"
+      @click="toggleMenuNav"
+    >
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
 
     <div ref="contenedorPerfil" class="header-perfil">
       <button
@@ -418,6 +434,69 @@ onBeforeUnmount(() => {
   .perfil-nickname {
     max-width: 6rem;
     font-size: 0.82rem;
+  }
+}
+
+.header-hamburguesa {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .header {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 10px 16px;
+    gap: 8px;
+  }
+
+  .header-logo {
+    flex: 1;
+  }
+
+  .header-search {
+    display: none;
+  }
+
+  .header-perfil {
+    margin-left: 0;
+  }
+
+  .header-hamburguesa {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .header-hamburguesa span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--color-text);
+    border-radius: 2px;
+    transition: transform 0.2s, opacity 0.2s;
+  }
+
+  .header-nav {
+    display: none;
+  }
+
+  .header-nav--abierto {
+    display: flex;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    flex-direction: column;
+    padding: 8px 0 12px;
+    gap: 2px;
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    z-index: 50;
   }
 }
 </style>
