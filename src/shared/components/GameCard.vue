@@ -44,6 +44,7 @@ function onToggleFavorito(evento: MouseEvent) {
         class="game-card__imagen"
         :src="imagen"
         :alt="nombre"
+        loading="lazy"
       />
       <button
         class="game-card__favorito"
