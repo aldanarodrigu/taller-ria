@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 
 import { catalogoConfig } from '../config/catalogo.config'
-import { fetchJuegos } from '../service/catalogo.service'
+import { fetchJuegos, fetchPaginaSiguiente } from '../service/catalogo.service'
 import type { CatalogoState, FiltrosCatalogo } from '../type/catalogo.types'
 
 const filtrosIniciales: FiltrosCatalogo = {
@@ -26,6 +26,7 @@ const createState = (): CatalogoState => ({
   loading: false,
   error: null,
   filtros: cargarFiltrosDeSession(),
+  nextUrl: null,
 })
 
 export const useCatalogoStore = defineStore('catalogo', {
@@ -49,7 +50,24 @@ export const useCatalogoStore = defineStore('catalogo', {
       this.error = null
 
       try {
-        this.items = await fetchJuegos(this.filtros)
+        const { results, next } = await fetchJuegos(this.filtros)
+        this.items = results
+        this.nextUrl = next
+      } catch (error) {
+        this.error = error instanceof Error ? error.message : 'Error inesperado'
+      } finally {
+        this.loading = false
+      }
+    },
+
+    async cargarMas() {
+      if (!this.nextUrl || this.loading) return
+      this.loading = true
+
+      try {
+        const { results, next } = await fetchPaginaSiguiente(this.nextUrl)
+        this.items = [...this.items, ...results]
+        this.nextUrl = next
       } catch (error) {
         this.error = error instanceof Error ? error.message : 'Error inesperado'
       } finally {

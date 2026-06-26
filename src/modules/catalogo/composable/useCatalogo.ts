@@ -10,6 +10,7 @@ export function useCatalogo() {
   const loading = computed(() => store.loading)
   const error = computed(() => store.error)
   const filtros = computed(() => store.filtros)
+  const hayMas = computed(() => store.nextUrl !== null)
 
   async function aplicarFiltro(filtro: Partial<FiltrosCatalogo>) {
     await store.setFiltros(filtro)
@@ -17,6 +18,10 @@ export function useCatalogo() {
 
   async function limpiarFiltros() {
     await store.limpiarFiltros()
+  }
+
+  async function cargarMas() {
+    await store.cargarMas()
   }
 
   onMounted(() => {
@@ -28,7 +33,9 @@ export function useCatalogo() {
     loading,
     error,
     filtros,
+    hayMas,
     aplicarFiltro,
     limpiarFiltros,
+    cargarMas,
   }
 }

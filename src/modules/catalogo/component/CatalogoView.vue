@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useAutenticacion } from '@/modules/auth/composable/useAutenticacion'
@@ -8,7 +9,26 @@ import GameCard from '../../../shared/components/GameCard.vue'
 
 const router = useRouter()
 const { esFavorito, toggleFavorito, usuarioActual } = useAutenticacion()
-const { items, loading, error, filtros, aplicarFiltro } = useCatalogo()
+const { items, loading, error, filtros, hayMas, aplicarFiltro, cargarMas } = useCatalogo()
+
+const centinela = ref<HTMLElement | null>(null)
+let observador: IntersectionObserver | null = null
+
+onMounted(() => {
+  observador = new IntersectionObserver(
+    (entradas) => {
+      if (entradas[0].isIntersecting && hayMas.value && !loading.value) {
+        void cargarMas()
+      }
+    },
+    { rootMargin: '0px 0px 300px 0px' },
+  )
+  if (centinela.value) observador.observe(centinela.value)
+})
+
+onBeforeUnmount(() => {
+  observador?.disconnect()
+})
 
 const generos = [
   { slug: 'action', label: 'Acción' },
@@ -116,10 +136,10 @@ function manejarToggleFavorito(gameId: number) {
     </aside>
 
     <main class="catalogo__contenido">
-      <p v-if="loading" class="catalogo__estado">Cargando juegos...</p>
+      <p v-if="loading && items.length === 0" class="catalogo__estado">Cargando juegos...</p>
       <p v-else-if="error" class="catalogo__estado catalogo__estado--error">{{ error }}</p>
 
-      <div v-else class="catalogo__grid">
+      <TransitionGroup v-else tag="div" name="tarjeta" class="catalogo__grid">
         <GameCard
           v-for="juego in items"
           :key="juego.id"
@@ -131,6 +151,10 @@ function manejarToggleFavorito(gameId: number) {
           :es-favorito="esFavorito(juego.id)"
           @toggle-favorito="manejarToggleFavorito"
         />
+      </TransitionGroup>
+
+      <div ref="centinela" class="catalogo__centinela">
+        <span v-if="loading && items.length > 0" class="catalogo__spinner" />
       </div>
     </main>
   </div>
@@ -213,6 +237,34 @@ function manejarToggleFavorito(gameId: number) {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 20px;
+}
+
+.tarjeta-enter-active {
+  transition: opacity 0.3s ease;
+}
+
+.tarjeta-enter-from {
+  opacity: 0;
+}
+
+.catalogo__centinela {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.catalogo__spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid #2a2a4a;
+  border-top-color: #7c3aed;
+  border-radius: 50%;
+  animation: girar 0.7s linear infinite;
+}
+
+@keyframes girar {
+  to { transform: rotate(360deg); }
 }
 
 @media (max-width: 1024px) {

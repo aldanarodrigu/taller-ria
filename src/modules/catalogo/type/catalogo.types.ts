@@ -26,4 +26,5 @@ export interface CatalogoState {
   loading: boolean
   error: string | null
   filtros: FiltrosCatalogo
+  nextUrl: string | null
 }
