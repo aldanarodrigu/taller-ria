@@ -3,6 +3,7 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useAutenticacion } from '@/modules/auth/composable/useAutenticacion'
+import Navbar from '@/shared/components/Navbar.vue'
 import { useCatalogo } from '../composable/useCatalogo'
 import type { JuegoRawg } from '../type/catalogo.types'
 import GameCard from '../../../shared/components/GameCard.vue'
@@ -66,6 +67,7 @@ function manejarToggleFavorito(gameId: number) {
 </script>
 
 <template>
+  <Navbar />
   <div class="catalogo">
     <aside class="catalogo__sidebar">
       <h2 class="catalogo__sidebar-titulo">Todos los Juegos</h2>
