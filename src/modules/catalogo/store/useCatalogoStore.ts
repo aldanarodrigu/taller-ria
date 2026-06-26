@@ -10,6 +10,22 @@ const filtrosIniciales: FiltrosCatalogo = {
   orden: '',
 }
 
+function guardarCache(filtros: FiltrosCatalogo, items: JuegoRawg[]): void {
+  sessionStorage.setItem(catalogoConfig.cacheKey, JSON.stringify({ filtros, items }))
+}
+
+function leerCache(filtros: FiltrosCatalogo): JuegoRawg[] | null {
+  const guardado = sessionStorage.getItem(catalogoConfig.cacheKey)
+  if (!guardado) return null
+  try {
+    const { filtros: filtrosCache, items } = JSON.parse(guardado)
+    if (JSON.stringify(filtrosCache) === JSON.stringify(filtros)) return items
+  } catch {
+    // cache corrupto, ignorar
+  }
+  return null
+}
+
 // recupera filtros guardados de la sesión anterior
 function cargarFiltrosDeSession(): FiltrosCatalogo {
   const guardado = sessionStorage.getItem(catalogoConfig.sessionKey)
@@ -46,15 +62,19 @@ export const useCatalogoStore = defineStore('catalogo', {
     },
 
     async fetchItems() {
-      this.loading = true
+      const cache = leerCache(this.filtros)
+      if (cache) this.items = cache
+
+      this.loading = !cache
       this.error = null
 
       try {
         const { results, next } = await fetchJuegos(this.filtros)
         this.items = results
         this.nextUrl = next
+        guardarCache(this.filtros, results)
       } catch (error) {
-        this.error = error instanceof Error ? error.message : 'Error inesperado'
+        if (!cache) this.error = error instanceof Error ? error.message : 'Error inesperado'
       } finally {
         this.loading = false
       }
