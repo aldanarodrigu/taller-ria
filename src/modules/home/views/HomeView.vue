@@ -29,8 +29,9 @@ function manejarToggleFavorito(gameId: number) {
     <p v-if="error" class="home-module__error">{{ error }}</p>
 
     <GameGrid
-      title="Juegos populares"
-      :juegos="juegosPopulares"
+      id="novedades"
+      title="Novedades"
+      :juegos="juegosNuevos"
       :cargando="cargando"
       :favoritos-ids="favoritos"
       @toggle-favorito="manejarToggleFavorito"
