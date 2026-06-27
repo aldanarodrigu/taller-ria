@@ -27,16 +27,17 @@ function manejarToggleFavorito(gameId: number) {
     <HeroBanner />
 
     <p v-if="error" class="home-module__error">{{ error }}</p>
-
     <GameGrid
-      id="novedades"
-      title="Novedades"
-      :juegos="juegosNuevos"
+      id="populares"
+      title="Juegos populares"
+      :juegos="juegosPopulares"
       :cargando="cargando"
       :favoritos-ids="favoritos"
       @toggle-favorito="manejarToggleFavorito"
     />
+
     <GameGrid
+      id="novedades"
       title="Novedades"
       :juegos="juegosNuevos"
       :cargando="cargando"
