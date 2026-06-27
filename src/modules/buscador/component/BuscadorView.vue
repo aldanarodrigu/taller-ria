@@ -1,11 +1,23 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useBuscador } from '../composable/useBuscador'
 
 const router = useRouter()
-const { query, items, loading, error, buscar, limpiar, currentPage, totalPages, goToPage } = useBuscador()
+const { query, items, loading, error, buscar, limpiar, currentPage, totalPages, goToPage } =
+  useBuscador()
 const localQuery = ref(query.value)
+
+watch(localQuery, async (nuevoValor) => {
+  const texto = nuevoValor.trim()
+
+  if (!texto) {
+    limpiar()
+    return
+  }
+
+  await buscar(texto)
+})
 
 function handleSubmit() {
   void buscar(localQuery.value)
@@ -27,47 +39,26 @@ function changePage(page: number) {
 
 <template>
   <section class="buscador">
-
     <!-- BUSCADOR -->
     <div class="search-box">
       <form @submit.prevent="handleSubmit">
-        <input
-          type="search"
-          v-model="localQuery"
-          placeholder="Buscar juegos..."
-        />
+        <input type="search" v-model="localQuery" placeholder="Buscar juegos..." />
 
-        <button type="submit">
-            Buscar
-        </button>
+        <button type="submit">Buscar</button>
 
-        <button
-          type="button"
-          class="clear-btn"
-          @click="handleClear"
-        >
-          Limpiar
-        </button>
+        <button type="button" class="clear-btn" @click="handleClear">Limpiar</button>
       </form>
     </div>
 
     <!-- ESTADOS -->
-    <div v-if="loading" class="buscador__estado">
-      Cargando resultados...
-    </div>
+    <div v-if="loading" class="buscador__estado">Cargando resultados...</div>
 
-    <div
-      v-else-if="error"
-      class="buscador__estado buscador__estado--error"
-    >
+    <div v-else-if="error" class="buscador__estado buscador__estado--error">
       {{ error }}
     </div>
 
     <!-- RESULTADOS -->
-    <section
-      v-if="items.length > 0"
-      class="results"
-    >
+    <section v-if="items.length > 0" class="results">
       <div class="tabs">
         <button class="active">Todos</button>
         <button>Plataforma</button>
@@ -77,36 +68,20 @@ function changePage(page: number) {
 
       <h2>Juegos ({{ items.length }})</h2>
 
-      <div
-        v-for="juego in items"
-        :key="juego.id"
-        class="game-card"
-        @click="irAlDetalle(juego.id)"
-      >
-        <img
-          :src="juego.background_image"
-          :alt="juego.name"
-        />
+      <div v-for="juego in items" :key="juego.id" class="game-card" @click="irAlDetalle(juego.id)">
+        <img :src="juego.background_image" :alt="juego.name" />
 
         <div class="game-info">
           <h3>{{ juego.name }}</h3>
         </div>
 
         <div class="year">
-          {{
-            juego.released
-              ? juego.released.substring(0, 4)
-              : '-'
-          }}
+          {{ juego.released ? juego.released.substring(0, 4) : '-' }}
         </div>
 
-        <div class="rating">
-          ⭐ {{ juego.rating }}
-        </div>
+        <div class="rating">⭐ {{ juego.rating }}</div>
 
-        <button class="favorite" type="button" @click.stop>
-          ♡
-        </button>
+        <button class="favorite" type="button" @click.stop>♡</button>
       </div>
 
       <!-- PAGINADOR -->
@@ -119,9 +94,7 @@ function changePage(page: number) {
           ← Anterior
         </button>
 
-        <div class="pagination__info">
-          Página {{ currentPage }} de {{ totalPages }}
-        </div>
+        <div class="pagination__info">Página {{ currentPage }} de {{ totalPages }}</div>
 
         <button
           :disabled="currentPage === totalPages"
@@ -131,21 +104,13 @@ function changePage(page: number) {
           Siguiente →
         </button>
       </div>
-
     </section>
 
-    <div
-      v-else
-      class="buscador__estado"
-    >
-      Busca un videojuego para comenzar.
-    </div>
-
+    <div v-else class="buscador__estado">Busca un videojuego para comenzar.</div>
   </section>
 </template>
 
 <style scoped>
-
 .buscador {
   width: 100%;
   min-height: 100vh;
@@ -180,7 +145,7 @@ function changePage(page: number) {
   cursor: pointer;
 }
 
-.search-box button[type="submit"] {
+.search-box button[type='submit'] {
   width: 70px;
   background: var(--color-brand);
   color: var(--color-text);
@@ -326,5 +291,4 @@ function changePage(page: number) {
     text-align: left;
   }
 }
-
 </style>
