@@ -195,7 +195,10 @@ onBeforeUnmount(() => {
           :size="28"
           alt="Avatar del usuario"
         />
-        <UserIcon v-else class="perfil-icon" />
+        <template v-else>
+          <UserIcon class="perfil-icon" />
+          <span class="perfil-login">Iniciar sesión</span>
+        </template>
       </button>
 
       <Transition name="menu-perfil">
@@ -434,6 +437,17 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   gap: 6px;
+}
+
+.perfil-login {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  transition: color 0.2s;
+}
+
+.perfil-button:hover .perfil-login {
+  color: var(--color-brand);
 }
 
 @media (max-width: 720px) {
