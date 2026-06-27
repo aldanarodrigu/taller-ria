@@ -32,7 +32,6 @@ const favoritosHabilitados = computed(
 const navItems = computed<NavItem[]>(() => [
   { label: 'Inicio', route: '/' },
   { label: 'Juegos', route: '/games' },
-  { label: 'Plataformas' },
   { label: 'Estadisticas', route: '/estadisticas' },
   { label: 'Buscar', route: '/search' },
   ...(usuarioActual.value ? [{ label: 'Favoritos', action: 'favoritos' as const }] : []),
