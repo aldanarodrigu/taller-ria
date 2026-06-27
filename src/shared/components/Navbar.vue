@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
-import { UserIcon } from '@heroicons/vue/24/outline'
+import { UserIcon, MagnifyingGlassIcon } from '@heroicons/vue/24/outline'
 import { useRoute, useRouter } from 'vue-router'
 
 import { useFavoritosJuegos } from '@/shared/composable/useFavoritosJuegos'
@@ -20,18 +20,21 @@ interface NavItem {
 
 const router = useRouter()
 const route = useRoute()
-const { cerrarSesion, favoritos, hidratarSesion, inicializado, toggleFavorito, usuarioActual } = useAutenticacion()
+const { cerrarSesion, favoritos, hidratarSesion, inicializado, toggleFavorito, usuarioActual } =
+  useAutenticacion()
 const menuAbierto = ref(false)
 const menuNavAbierto = ref(false)
 const modalFavoritosAbierto = ref(false)
 const contenedorPerfil = ref<HTMLElement | null>(null)
-const favoritosHabilitados = computed(() => modalFavoritosAbierto.value && Boolean(usuarioActual.value))
+const favoritosHabilitados = computed(
+  () => modalFavoritosAbierto.value && Boolean(usuarioActual.value),
+)
 const navItems = computed<NavItem[]>(() => [
   { label: 'Inicio', route: '/' },
   { label: 'Juegos', route: '/games' },
-  { label: 'Generos' },
   { label: 'Plataformas' },
   { label: 'Estadisticas', route: '/estadisticas' },
+  { label: 'Buscar', route: '/search' },
   ...(usuarioActual.value ? [{ label: 'Favoritos', action: 'favoritos' as const }] : []),
 ])
 const {
@@ -167,19 +170,12 @@ onBeforeUnmount(() => {
         :class="{ 'nav-link--active': esNavActivo(item) }"
         @click.prevent="navegar(item)"
       >
+        <MagnifyingGlassIcon v-if="item.label === 'Buscar'" class="nav-icon" />
         {{ item.label }}
       </a>
     </nav>
 
-    <div class="header-search">
-      <!-- aca el buscador -->
-    </div>
-
-    <button
-      class="header-hamburguesa"
-      aria-label="Abrir menú"
-      @click="toggleMenuNav"
-    >
+    <button class="header-hamburguesa" aria-label="Abrir menú" @click="toggleMenuNav">
       <span></span>
       <span></span>
       <span></span>
@@ -206,7 +202,11 @@ onBeforeUnmount(() => {
       <Transition name="menu-perfil">
         <div v-if="menuAbierto && usuarioActual" class="perfil-menu">
           <button class="perfil-menu__item" type="button" @click="irAPerfil">Perfil</button>
-          <button class="perfil-menu__item perfil-menu__item--salir" type="button" @click="salirDeLaSesion">
+          <button
+            class="perfil-menu__item perfil-menu__item--salir"
+            type="button"
+            @click="salirDeLaSesion"
+          >
             Cerrar sesion
           </button>
         </div>
@@ -426,6 +426,17 @@ onBeforeUnmount(() => {
   transform: translateY(0) scale(1);
 }
 
+.nav-icon {
+  width: 15px;
+  height: 15px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 @media (max-width: 720px) {
   .perfil-button {
     padding-left: 0.55rem;
@@ -478,7 +489,9 @@ onBeforeUnmount(() => {
     height: 2px;
     background: var(--color-text);
     border-radius: 2px;
-    transition: transform 0.2s, opacity 0.2s;
+    transition:
+      transform 0.2s,
+      opacity 0.2s;
   }
 
   .header-nav {
