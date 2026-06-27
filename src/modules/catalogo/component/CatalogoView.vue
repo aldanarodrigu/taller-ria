@@ -8,6 +8,8 @@ import { useCatalogo } from '../composable/useCatalogo'
 import type { JuegoRawg } from '../type/catalogo.types'
 import GameCard from '../../../shared/components/GameCard.vue'
 
+import '../../../main.css'
+
 const router = useRouter()
 const { esFavorito, toggleFavorito, usuarioActual } = useAutenticacion()
 const { items, loading, error, filtros, hayMas, aplicarFiltro, cargarMas } = useCatalogo()
@@ -61,7 +63,6 @@ function manejarToggleFavorito(gameId: number) {
     void router.push('/iniciar-sesion')
     return
   }
-
   toggleFavorito(gameId)
 }
 </script>
@@ -166,42 +167,44 @@ function manejarToggleFavorito(gameId: number) {
 .catalogo {
   display: flex;
   min-height: 100vh;
-  background-color: #0d0d1a;
-  color: #ffffff;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
 }
 
+/* ── Sidebar ── */
 .catalogo__sidebar {
   width: 220px;
   min-width: 220px;
   padding: 24px 16px;
-  background-color: #12122a;
-  border-right: 1px solid #2a2a4a;
+  background-color: var(--color-bg-surface);
+  border-right: 1px solid var(--color-border);
 }
 
 .catalogo__sidebar-titulo {
+  font-family: var(--font-display);
   font-size: 1rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--color-text);
   margin: 0 0 24px;
 }
 
+/* ── Filtros ── */
 .catalogo__filtro-grupo {
   margin-bottom: 24px;
 }
 
 .catalogo__filtro-titulo {
+  font-family: var(--font-body);
   font-size: 0.7rem;
-  font-weight: 600;
-  color: #7c3aed;
+  font-weight: 500;
+  color: var(--color-brand);
   text-transform: uppercase;
   letter-spacing: 0.08em;
   margin: 0 0 8px;
 }
 
 .catalogo__filtro-lista {
-  list-style: none;
-  padding: 0;
-  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -211,22 +214,43 @@ function manejarToggleFavorito(gameId: number) {
   padding: 6px 10px;
   border-radius: 6px;
   font-size: 0.85rem;
-  color: #a0a0c0;
+  color: var(--color-text-muted);
   cursor: pointer;
+  transition:
+    color 0.15s,
+    background-color 0.15s;
+}
+
+.catalogo__filtro-opcion:hover {
+  color: var(--color-text-hover);
+  background-color: var(--color-bg-hover);
 }
 
 .catalogo__filtro-opcion--activo {
-  background-color: #7c3aed;
-  color: #ffffff;
+  color: var(--color-text);
+  background: var(--color-bg-hover);
+  position: relative;
 }
 
+.catalogo__filtro-opcion--activo::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2px;
+  height: 20px;
+  background: var(--color-brand);
+  border-radius: 2px;
+}
+/* ── Contenido principal ── */
 .catalogo__contenido {
   flex: 1;
   padding: 24px;
 }
 
 .catalogo__estado {
-  color: #a0a0c0;
+  color: var(--color-text-muted);
   text-align: center;
   padding: 48px;
 }
@@ -241,6 +265,7 @@ function manejarToggleFavorito(gameId: number) {
   gap: 20px;
 }
 
+/* ── Transición ── */
 .tarjeta-enter-active {
   transition: opacity 0.3s ease;
 }
@@ -249,6 +274,7 @@ function manejarToggleFavorito(gameId: number) {
   opacity: 0;
 }
 
+/* ── Infinite scroll centinela ── */
 .catalogo__centinela {
   height: 64px;
   display: flex;
@@ -259,16 +285,19 @@ function manejarToggleFavorito(gameId: number) {
 .catalogo__spinner {
   width: 28px;
   height: 28px;
-  border: 3px solid #2a2a4a;
-  border-top-color: #7c3aed;
+  border: 3px solid var(--color-border-mid);
+  border-top-color: var(--color-brand);
   border-radius: 50%;
   animation: girar 0.7s linear infinite;
 }
 
 @keyframes girar {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
+/* ── Responsive ── */
 @media (max-width: 1024px) {
   .catalogo__sidebar {
     width: 180px;
@@ -285,7 +314,7 @@ function manejarToggleFavorito(gameId: number) {
     width: 100%;
     min-width: unset;
     border-right: none;
-    border-bottom: 1px solid #2a2a4a;
+    border-bottom: 1px solid var(--color-border);
     padding: 8px 0;
     display: flex;
     flex-direction: column;
@@ -303,21 +332,16 @@ function manejarToggleFavorito(gameId: number) {
     position: relative;
   }
 
-  .catalogo__filtro-grupo::after {
-    content: '›';
+  .catalogo__filtro-opcion--activo::after {
+    content: '';
     position: absolute;
-    right: 0;
-    bottom: 6px;
-    width: 40px;
-    height: 32px;
-    background: linear-gradient(to right, transparent, #12122a 70%);
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding-right: 8px;
-    color: #7c3aed;
-    font-size: 1.1rem;
-    pointer-events: none;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 2px;
+    background: var(--color-brand);
+    border-radius: 2px;
   }
 
   .catalogo__filtro-titulo {

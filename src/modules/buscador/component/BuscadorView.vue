@@ -39,74 +39,59 @@ function changePage(page: number) {
 
 <template>
   <section class="buscador">
-    <!-- BUSCADOR -->
     <div class="search-box">
       <form @submit.prevent="handleSubmit">
         <input type="search" v-model="localQuery" placeholder="Buscar juegos..." />
-
         <button type="submit">Buscar</button>
-
         <button type="button" class="clear-btn" @click="handleClear">Limpiar</button>
       </form>
     </div>
 
-    <!-- ESTADOS -->
     <div v-if="loading" class="buscador__estado">Cargando resultados...</div>
 
     <div v-else-if="error" class="buscador__estado buscador__estado--error">
       {{ error }}
     </div>
 
-    <!-- RESULTADOS -->
     <section v-if="items.length > 0" class="results">
       <div class="tabs">
         <button class="active">Todos</button>
-        <button>Plataforma</button>
-        <button>Desarrollador</button>
-        <button>Editorial</button>
       </div>
 
       <h2>Juegos ({{ items.length }})</h2>
 
       <div v-for="juego in items" :key="juego.id" class="game-card" @click="irAlDetalle(juego.id)">
         <img :src="juego.background_image" :alt="juego.name" />
-
         <div class="game-info">
           <h3>{{ juego.name }}</h3>
         </div>
-
-        <div class="year">
-          {{ juego.released ? juego.released.substring(0, 4) : '-' }}
-        </div>
-
+        <div class="year">{{ juego.released ? juego.released.substring(0, 4) : '-' }}</div>
         <div class="rating">⭐ {{ juego.rating }}</div>
-
         <button class="favorite" type="button" @click.stop>♡</button>
       </div>
 
-      <!-- PAGINADOR -->
       <div v-if="totalPages > 1" class="pagination">
         <button
           :disabled="currentPage === 1"
           @click="changePage(currentPage - 1)"
-          class="pagination__btn pagination__btn--prev"
+          class="pagination__btn"
         >
           ← Anterior
         </button>
-
         <div class="pagination__info">Página {{ currentPage }} de {{ totalPages }}</div>
-
         <button
           :disabled="currentPage === totalPages"
           @click="changePage(currentPage + 1)"
-          class="pagination__btn pagination__btn--next"
+          class="pagination__btn"
         >
           Siguiente →
         </button>
       </div>
     </section>
 
-    <div v-else class="buscador__estado">Busca un videojuego para comenzar.</div>
+    <div v-else-if="!loading && !error" class="buscador__estado">
+      Busca un videojuego para comenzar.
+    </div>
   </section>
 </template>
 
@@ -117,9 +102,10 @@ function changePage(page: number) {
   padding: 40px;
   background: var(--color-bg);
   color: var(--color-text);
+  font-family: var(--font-body);
 }
 
-/* BUSCADOR */
+/* ── Buscador ── */
 
 .search-box {
   margin-bottom: 30px;
@@ -139,16 +125,25 @@ function changePage(page: number) {
   background: var(--color-bg-surface);
   color: var(--color-text);
   font-size: 1rem;
+  font-family: var(--font-body);
 }
 
-.search-box button {
-  cursor: pointer;
+.search-box input::placeholder {
+  color: var(--color-text-muted);
 }
 
 .search-box button[type='submit'] {
   width: 70px;
   background: var(--color-brand);
   color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.search-box button[type='submit']:hover {
+  background: var(--color-brand-dark);
 }
 
 .clear-btn {
@@ -156,9 +151,16 @@ function changePage(page: number) {
   background: var(--color-border-mid);
   color: var(--color-text);
   border-radius: 0 10px 10px 0;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  transition: background 0.2s;
 }
 
-/* MENSAJES */
+.clear-btn:hover {
+  background: var(--color-border-focus);
+}
+
+/* ── Estados ── */
 
 .buscador__estado {
   text-align: center;
@@ -167,22 +169,59 @@ function changePage(page: number) {
 }
 
 .buscador__estado--error {
-  color: #f87171;
+  color: var(--color-error, #f87171);
 }
 
-/* RESULTADOS */
+/* ── Resultados ── */
 
 .results {
   background: var(--color-bg-surface);
   border-radius: 16px;
   padding: 25px;
+  border: 1px solid var(--color-border);
 }
 
 .results h2 {
   margin-bottom: 20px;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text);
 }
 
-/* TARJETA */
+/* ── Tabs ── */
+
+.tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.tabs button {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-family: var(--font-body);
+  color: var(--color-text-muted);
+  background: transparent;
+  border: 1px solid var(--color-border-mid);
+  transition:
+    color 0.15s,
+    background 0.15s;
+}
+
+.tabs button:hover {
+  color: var(--color-text-hover);
+  background: var(--color-bg-hover);
+}
+
+.tabs button.active {
+  background: var(--color-brand);
+  color: var(--color-text);
+  border-color: var(--color-brand);
+}
+
+/* ── Tarjeta ── */
 
 .game-card {
   display: grid;
@@ -192,12 +231,17 @@ function changePage(page: number) {
   padding: 15px;
   margin-bottom: 12px;
   border-radius: 12px;
-  background: var(--color-bg-surface);
-  transition: 0.2s;
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
 }
 
 .game-card:hover {
   background: var(--color-bg-hover);
+  border-color: var(--color-border-mid);
 }
 
 .game-card img {
@@ -210,31 +254,25 @@ function changePage(page: number) {
 .game-info h3 {
   margin: 0;
   font-size: 0.95rem;
+  font-family: var(--font-body);
+  font-weight: 500;
+  color: var(--color-text);
 }
 
 .year,
 .rating {
   color: var(--color-text-muted);
   text-align: center;
+  font-size: 0.9rem;
 }
 
 .favorite {
   background: transparent;
-  color: #ffcc66;
-  cursor: pointer;
+  color: var(--color-warning, #ffcc66);
   font-size: 1.2rem;
 }
 
-.view-all {
-  display: block;
-  text-align: right;
-  margin-top: 20px;
-  color: var(--color-brand);
-  text-decoration: none;
-  font-weight: bold;
-}
-
-/* PAGINADOR */
+/* ── Paginador ── */
 
 .pagination {
   display: flex;
@@ -255,11 +293,11 @@ function changePage(page: number) {
   padding: 10px 16px;
   background: var(--color-brand);
   color: var(--color-text);
-  border: none;
   border-radius: 8px;
-  cursor: pointer;
+  font-family: var(--font-body);
   font-weight: 600;
-  transition: 0.2s;
+  font-size: 0.9rem;
+  transition: background 0.2s;
 }
 
 .pagination__btn:hover:not(:disabled) {
@@ -272,11 +310,15 @@ function changePage(page: number) {
   cursor: not-allowed;
 }
 
-/* RESPONSIVE */
+/* ── Responsive ── */
 
 @media (max-width: 768px) {
   .buscador {
     padding: 20px;
+  }
+
+  .tabs {
+    flex-wrap: wrap;
   }
 
   .game-card {
