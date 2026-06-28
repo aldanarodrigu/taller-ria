@@ -53,13 +53,13 @@ function obtenerAutor(resena: ResenaDetalleItem): string {
 <template>
   <section class="resenas-detalle-juego">
     <header class="resenas-detalle-juego__encabezado">
-      <h2 class="resenas-detalle-juego__titulo">Resenas</h2>
+      <h2 class="resenas-detalle-juego__titulo">Reseñas</h2>
       <p class="resenas-detalle-juego__subtitulo">Opiniones guardadas por los usuarios de este navegador.</p>
     </header>
 
     <div class="resenas-detalle-juego__formulario">
       <p v-if="!tieneSesion" class="resenas-detalle-juego__aviso">
-        Inicia sesion para escribir tu resena.
+        Inicia sesion para escribir tu reseña.
       </p>
 
       <form
@@ -68,7 +68,7 @@ function obtenerAutor(resena: ResenaDetalleItem): string {
         @submit.prevent="emit('guardar')"
       >
         <label class="resenas-detalle-juego__campo">
-          <span class="resenas-detalle-juego__label">Tu resena</span>
+          <span class="resenas-detalle-juego__label">Tu reseña</span>
           <textarea
             class="resenas-detalle-juego__textarea"
             :value="texto"
@@ -90,7 +90,7 @@ function obtenerAutor(resena: ResenaDetalleItem): string {
 
         <div class="resenas-detalle-juego__acciones">
           <button type="submit" class="resenas-detalle-juego__boton resenas-detalle-juego__boton--primario">
-            Guardar resena
+            Guardar reseña
           </button>
 
           <button
@@ -105,7 +105,7 @@ function obtenerAutor(resena: ResenaDetalleItem): string {
       </form>
 
       <div v-else class="resenas-detalle-juego__estado-propio">
-        <p class="resenas-detalle-juego__estado-texto">Ya publicaste una resena para este juego.</p>
+        <p class="resenas-detalle-juego__estado-texto">Ya publicaste una reseña para este juego.</p>
         <div class="resenas-detalle-juego__acciones">
           <button type="button" class="resenas-detalle-juego__boton" @click="emit('iniciarEdicion')">
             Editar
@@ -142,7 +142,7 @@ function obtenerAutor(resena: ResenaDetalleItem): string {
       />
     </div>
 
-    <p v-else class="resenas-detalle-juego__vacio">Todavia no hay resenas para este juego.</p>
+    <p v-else class="resenas-detalle-juego__vacio">Todavia no hay reseñas para este juego.</p>
   </section>
 </template>
 

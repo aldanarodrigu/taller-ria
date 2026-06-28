@@ -27,7 +27,7 @@ function obtenerTitulo(resena: ResenaJuegoLocal): string {
 <template>
   <section class="resenas-perfil">
     <header class="resenas-perfil__encabezado">
-      <h2 class="resenas-perfil__titulo">Mis resenas</h2>
+      <h2 class="resenas-perfil__titulo">Mis reseñas</h2>
       <p class="resenas-perfil__descripcion">Tus opiniones guardadas desde el detalle de cada juego.</p>
     </header>
 
@@ -45,8 +45,8 @@ function obtenerTitulo(resena: ResenaJuegoLocal): string {
     </div>
 
     <div v-else class="resenas-perfil__vacio">
-      <p class="resenas-perfil__vacio-titulo">Todavia no escribiste resenas</p>
-      <p class="resenas-perfil__vacio-texto">Cuando escribas una resena, va a aparecer en esta seccion.</p>
+      <p class="resenas-perfil__vacio-titulo">Todavia no escribiste reseñas</p>
+      <p class="resenas-perfil__vacio-texto">Cuando escribas una reseña, va a aparecer en esta seccion.</p>
     </div>
   </section>
 </template>

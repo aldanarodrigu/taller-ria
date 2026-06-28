@@ -98,6 +98,12 @@ function volverPaginaAnterior() {
     <div v-else class="pagina-detalle-juego__contenido">
       <CabeceraDetalleJuego v-bind="detallePreparado.cabecera" />
 
+      <div class="pagina-detalle-juego__grilla">
+        <ResumenDetalleJuego v-bind="detallePreparado.resumen" />
+        <DescripcionDetalleJuego v-bind="detallePreparado.descripcion" />
+        <PlataformasDetalleJuego :plataformas="detallePreparado.plataformas" />
+        <TiendasDetalleJuego :tiendas="detallePreparado.tiendas" />
+      </div>
       <ResenasDetalleJuego
         :editando="resenaEditando"
         :error="resenaError"
@@ -115,13 +121,6 @@ function volverPaginaAnterior() {
         @guardar="guardarResena"
         @iniciar-edicion="iniciarEdicionResena"
       />
-
-      <div class="pagina-detalle-juego__grilla">
-        <ResumenDetalleJuego v-bind="detallePreparado.resumen" />
-        <DescripcionDetalleJuego v-bind="detallePreparado.descripcion" />
-        <PlataformasDetalleJuego :plataformas="detallePreparado.plataformas" />
-        <TiendasDetalleJuego :tiendas="detallePreparado.tiendas" />
-      </div>
     </div>
   </section>
 </template>
