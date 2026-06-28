@@ -258,6 +258,20 @@ function manejarToggleFavorito(gameId: number) {
   margin-top: 10px;
 }
 
+
+@media (max-width: 1024px) {
+  .buscador__grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+}
+
+
+@media (max-width: 640px) {
+  .buscador__grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+}
+
 .buscador__item {
   cursor: pointer;
 }
@@ -311,17 +325,6 @@ function manejarToggleFavorito(gameId: number) {
   .tabs {
     flex-wrap: wrap;
   }
-
-  .game-card {
-    grid-template-columns: 70px 1fr;
-    gap: 12px;
-  }
-
-  .year,
-  .rating,
-  .favorite {
-    grid-column: 2;
-    text-align: left;
-  }
 }
+
 </style>
