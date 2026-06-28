@@ -2,7 +2,7 @@ import { computed, ref, watch } from 'vue'
 
 import { useAutenticacion } from '@/modules/auth/composable/useAutenticacion'
 
-export function useResenaJuego(gameId: () => number) {
+export function useResenaJuego(gameId: () => number, tituloJuego: () => string) {
   const {
     eliminarResena,
     guardarResena,
@@ -22,7 +22,7 @@ export function useResenaJuego(gameId: () => number) {
     if (!usuario) {
       return null
     }
-    // si hay usuarios retornamos las reseñas para ese juego
+    // Si hay usuarios, retornamos las resenas para ese juego.
     return usuario.resenas.find((resena) => resena.gameId === gameId()) ?? null
   })
   const resenasDelJuego = computed(() =>
@@ -78,12 +78,12 @@ export function useResenaJuego(gameId: () => number) {
     exito.value = null
 
     try {
-      guardarResena(gameId(), texto.value, puntaje.value)
+      guardarResena(gameId(), tituloJuego(), texto.value, puntaje.value)
       editando.value = false
-      exito.value = 'Reseña guardada correctamente.'
+      exito.value = 'Resena guardada correctamente.'
       cargarFormularioDesdeResena()
     } catch (cause) {
-      error.value = cause instanceof Error ? cause.message : 'No se pudo guardar la reseña.'
+      error.value = cause instanceof Error ? cause.message : 'No se pudo guardar la resena.'
     }
   }
 
@@ -96,9 +96,9 @@ export function useResenaJuego(gameId: () => number) {
       texto.value = ''
       puntaje.value = null
       editando.value = false
-      exito.value = 'Reseña eliminada correctamente.'
+      exito.value = 'Resena eliminada correctamente.'
     } catch (cause) {
-      error.value = cause instanceof Error ? cause.message : 'No se pudo eliminar la reseña.'
+      error.value = cause instanceof Error ? cause.message : 'No se pudo eliminar la resena.'
     }
   }
 

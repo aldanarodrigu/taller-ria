@@ -46,13 +46,12 @@ export interface CampoFormularioAutenticacion {
 
 export type ValoresFormularioAutenticacion = Record<string, string>
 
-// Types de reseñas
+// Tipos de resenas locales.
 export interface ResenaJuegoLocal {
   gameId: number
+  tituloJuego: string
   texto: string
   puntaje: number | null
   fechaCreacion: string
   fechaActualizacion: string
 }
-
-

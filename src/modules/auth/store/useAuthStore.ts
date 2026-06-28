@@ -141,11 +141,11 @@ export const useAutenticacionStore = defineStore('auth', {
       return obtenerResenaUsuarioActual(gameId)
     },
 
-    guardarResena(gameId: number, texto: string, puntaje: number | null) {
+    guardarResena(gameId: number, tituloJuego: string, texto: string, puntaje: number | null) {
       this.error = null
 
       try {
-        const usuarioActualizado = guardarResenaUsuarioActual(gameId, texto, puntaje)
+        const usuarioActualizado = guardarResenaUsuarioActual(gameId, tituloJuego, texto, puntaje)
         this.usuarios = obtenerUsuariosGuardados()
         this.usuarioActual = usuarioActualizado
 

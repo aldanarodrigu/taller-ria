@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import Navbar from '@/shared/components/Navbar.vue'
 import { useAutenticacion } from '@/modules/auth/composable/useAutenticacion'
 import { generarAvatarSeedAleatorio } from '@/modules/auth/service/auth.service'
@@ -11,6 +12,7 @@ import type { DatosPerfilEditable } from '../type/perfil.types'
 
 const router = useRouter()
 const { favoritos, toggleFavorito, usuarioActual } = useAutenticacion()
+const resenasPerfil = computed(() => usuarioActual.value?.resenas ?? [])
 const {
   actualizarBorrador,
   borrador,
@@ -52,6 +54,10 @@ function manejarSeleccionFavorito(id: number) {
   void router.push(`/games/${id}`)
 }
 
+function manejarSeleccionResena(id: number) {
+  void router.push(`/games/${id}`)
+}
+
 function manejarToggleFavorito(id: number) {
   toggleFavorito(id)
 }
@@ -72,12 +78,14 @@ function manejarToggleFavorito(id: number) {
       :favoritos="favoritosItems"
       :favoritos-cargando="favoritosLoading"
       :favoritos-error="favoritosError"
+      :resenas="resenasPerfil"
       @generar-avatar="manejarGeneracionAvatar"
       @actualizar-borrador="manejarActualizacionBorrador"
       @guardar="guardarPerfil"
       @limpiar-mensajes="limpiarMensajes"
       @restablecer="restablecerBorrador"
       @seleccionar-favorito="manejarSeleccionFavorito"
+      @seleccionar-resena="manejarSeleccionResena"
       @toggle-favorito="manejarToggleFavorito"
       @volver="manejarVolver"
     />

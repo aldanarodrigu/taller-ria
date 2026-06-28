@@ -44,8 +44,8 @@ export function useAutenticacion() {
     return store.obtenerResena(gameId)
   }
 
-  function guardarResena(gameId: number, texto: string, puntaje: number | null) {
-    return store.guardarResena(gameId, texto, puntaje)
+  function guardarResena(gameId: number, tituloJuego: string, texto: string, puntaje: number | null) {
+    return store.guardarResena(gameId, tituloJuego, texto, puntaje)
   }
 
   function eliminarResena(gameId: number) {

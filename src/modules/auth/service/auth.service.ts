@@ -56,6 +56,10 @@ function normalizarResenas(resenas: unknown): ResenaJuegoLocal[] {
     .filter((resena): resena is Partial<ResenaJuegoLocal> => typeof resena === 'object' && resena !== null)
     .map((resena) => ({
       gameId: Number(resena.gameId),
+      tituloJuego:
+        typeof resena.tituloJuego === 'string' && resena.tituloJuego.trim()
+          ? resena.tituloJuego.trim()
+          : `Juego #${Number(resena.gameId)}`,
       texto: typeof resena.texto === 'string' ? resena.texto.trim() : '',
       puntaje: typeof resena.puntaje === 'number' ? resena.puntaje : null,
       fechaCreacion: typeof resena.fechaCreacion === 'string' ? resena.fechaCreacion : new Date().toISOString(),
@@ -254,13 +258,15 @@ export function obtenerResenaUsuarioActual(gameId: number): ResenaJuegoLocal | n
 
 export function guardarResenaUsuarioActual(
   gameId: number,
+  tituloJuego: string,
   texto: string,
   puntaje: number | null,
 ): UsuarioLocal {
   const textoNormalizado = texto.trim()
+  const tituloJuegoNormalizado = tituloJuego.trim() || `Juego #${gameId}`
 
   if (!textoNormalizado) {
-    throw new Error('La reseña no puede estar vacia')
+    throw new Error('La resena no puede estar vacia')
   }
 
   if (puntaje !== null && (puntaje < 1 || puntaje > 5)) {
@@ -273,6 +279,7 @@ export function guardarResenaUsuarioActual(
 
     const resenaActualizada: ResenaJuegoLocal = {
       gameId,
+      tituloJuego: tituloJuegoNormalizado,
       texto: textoNormalizado,
       puntaje,
       fechaCreacion: resenaExistente?.fechaCreacion ?? fechaActual,

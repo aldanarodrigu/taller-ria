@@ -6,6 +6,8 @@ import FavoritosPanel from '@/shared/components/FavoritosPanel.vue'
 
 import type { DatosPerfilEditable } from '../type/perfil.types'
 import type { JuegoFavoritoResumen } from '@/shared/type/favoritos.types'
+import type { ResenaJuegoLocal } from '@/modules/auth/type/auth.types'
+import ResenasPerfilPanel from './ResenasPerfilPanel.vue'
 
 const props = defineProps<{
   borrador: DatosPerfilEditable
@@ -18,6 +20,7 @@ const props = defineProps<{
   guardando: boolean
   nickname: string
   perfil: DatosPerfilEditable | null
+  resenas: ResenaJuegoLocal[]
 }>()
 
 const emit = defineEmits<{
@@ -27,6 +30,7 @@ const emit = defineEmits<{
   'limpiar-mensajes': []
   restablecer: []
   'seleccionar-favorito': [id: number]
+  'seleccionar-resena': [id: number]
   'toggle-favorito': [id: number]
   volver: []
 }>()
@@ -191,6 +195,12 @@ function manejarRestablecer() {
         @seleccionar="emit('seleccionar-favorito', $event)"
         @toggle-favorito="emit('toggle-favorito', $event)"
       />
+
+      <ResenasPerfilPanel
+        class="perfil-module__resenas"
+        :resenas="resenas"
+        @seleccionar="emit('seleccionar-resena', $event)"
+      />
     </div>
   </section>
 </template>
@@ -239,7 +249,8 @@ function manejarRestablecer() {
 
 /* Tarjetas */
 .perfil-module__tarjeta,
-.perfil-module__favoritos {
+.perfil-module__favoritos,
+.perfil-module__resenas {
   padding: 24px;
   border: 1px solid #1e2433;
   border-radius: 16px;
@@ -252,7 +263,8 @@ function manejarRestablecer() {
   gap: 20px;
 }
 
-.perfil-module__favoritos {
+.perfil-module__favoritos,
+.perfil-module__resenas {
   margin-top: 24px;
 }
 
@@ -380,6 +392,7 @@ function manejarRestablecer() {
 
   .perfil-module__tarjeta,
   .perfil-module__favoritos,
+  .perfil-module__resenas,
   .perfil-module__resumen {
     padding: 16px;
   }

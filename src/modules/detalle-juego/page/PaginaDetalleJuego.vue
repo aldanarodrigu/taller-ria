@@ -1,10 +1,12 @@
 <script setup lang="ts">
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 import CabeceraDetalleJuego from '../component/CabeceraDetalleJuego.vue'
 import DescripcionDetalleJuego from '../component/DescripcionDetalleJuego.vue'
 import EstadoDetalleJuego from '../component/EstadoDetalleJuego.vue'
 import PlataformasDetalleJuego from '../component/PlataformasDetalleJuego.vue'
+import ResenasDetalleJuego from '../component/ResenasDetalleJuego.vue'
 import ResumenDetalleJuego from '../component/ResumenDetalleJuego.vue'
 import TiendasDetalleJuego from '../component/TiendasDetalleJuego.vue'
 import { useDetalleJuego } from '../composable/useDetalleJuego'
@@ -21,6 +23,8 @@ const {
   idJuego,
 } = useDetalleJuego()
 
+const tituloJuegoResena = computed(() => detallePreparado.value?.cabecera.titulo ?? `Juego #${idJuego.value}`)
+
 const {
   cancelarEdicion: cancelarEdicionResena,
   editando: resenaEditando,
@@ -28,15 +32,16 @@ const {
   error: resenaError,
   exito: resenaExito,
   guardar: guardarResena,
+  hayResenas,
   iniciarEdicion: iniciarEdicionResena,
   puntaje: resenaPuntaje,
-  resenaGuardada,
+  resenasDelJuego,
   texto: resenaTexto,
   tieneResena,
   tieneSesion: usuarioPuedeResenar,
   actualizarPuntaje: actualizarPuntajeResena,
   actualizarTexto: actualizarTextoResena,
-} = useResenaJuego(() => idJuego.value)
+} = useResenaJuego(() => idJuego.value, () => tituloJuegoResena.value)
 
 function volverPaginaAnterior() {
   if (window.history.length > 1) {
@@ -92,6 +97,24 @@ function volverPaginaAnterior() {
 
     <div v-else class="pagina-detalle-juego__contenido">
       <CabeceraDetalleJuego v-bind="detallePreparado.cabecera" />
+
+      <ResenasDetalleJuego
+        :editando="resenaEditando"
+        :error="resenaError"
+        :exito="resenaExito"
+        :hay-resenas="hayResenas"
+        :puntaje="resenaPuntaje"
+        :resenas="resenasDelJuego"
+        :texto="resenaTexto"
+        :tiene-resena="tieneResena"
+        :tiene-sesion="usuarioPuedeResenar"
+        @actualizar-puntaje="actualizarPuntajeResena"
+        @actualizar-texto="actualizarTextoResena"
+        @cancelar="cancelarEdicionResena"
+        @eliminar="eliminarResena"
+        @guardar="guardarResena"
+        @iniciar-edicion="iniciarEdicionResena"
+      />
 
       <div class="pagina-detalle-juego__grilla">
         <ResumenDetalleJuego v-bind="detallePreparado.resumen" />
