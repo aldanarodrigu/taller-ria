@@ -109,21 +109,21 @@ export function useResenaJuego(gameId: () => number) {
   }, { immediate: true })
 
   return {
+    actualizarPuntaje,
+    actualizarTexto,
     cancelarEdicion,
     editando,
     eliminar,
     error,
     exito,
     guardar,
+    hayResenas,
     iniciarEdicion,
     puntaje,
     resenaGuardada,
+    resenasDelJuego,
     texto,
     tieneResena,
     tieneSesion,
-    actualizarPuntaje,
-    actualizarTexto,
-    hayResenas,
-    resenasDelJuego,
   }
 }
