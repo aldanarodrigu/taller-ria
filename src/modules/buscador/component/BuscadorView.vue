@@ -2,10 +2,15 @@
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useBuscador } from '../composable/useBuscador'
+import { useAutenticacion } from '@/modules/auth/composable/useAutenticacion'
+import { type JuegoRawg } from '../type/buscador.types'
+import Navbar from '@/shared/components/Navbar.vue'
+import GameCard from '../../../shared/components/GameCard.vue'
 
 const router = useRouter()
 const { query, items, loading, error, buscar, limpiar, currentPage, totalPages, goToPage } =
   useBuscador()
+const { esFavorito, toggleFavorito, usuarioActual } = useAutenticacion()
 const localQuery = ref(query.value)
 
 watch(localQuery, async (nuevoValor) => {
@@ -28,6 +33,11 @@ function handleClear() {
   limpiar()
 }
 
+function getNombrePlataformas(juego: JuegoRawg): string[] {
+  return (juego.platforms ?? []).map((p) => p.platform.name)
+}
+
+
 function irAlDetalle(id: number) {
   void router.push(`/games/${id}`)
 }
@@ -35,9 +45,18 @@ function irAlDetalle(id: number) {
 function changePage(page: number) {
   void goToPage(page)
 }
+
+function manejarToggleFavorito(gameId: number) {
+  if (!usuarioActual.value) {
+    void router.push('/iniciar-sesion')
+    return
+  }
+  toggleFavorito(gameId)
+}
 </script>
 
 <template>
+  <Navbar />
   <section class="buscador">
     <div class="search-box">
       <form @submit.prevent="handleSubmit">
@@ -53,41 +72,50 @@ function changePage(page: number) {
       {{ error }}
     </div>
 
-    <section v-if="items.length > 0" class="results">
-      <div class="tabs">
-        <button class="active">Todos</button>
-      </div>
-
-      <h2>Juegos ({{ items.length }})</h2>
-
-      <div v-for="juego in items" :key="juego.id" class="game-card" @click="irAlDetalle(juego.id)">
-        <img :src="juego.background_image" :alt="juego.name" />
-        <div class="game-info">
-          <h3>{{ juego.name }}</h3>
+      <section v-if="items.length > 0" class="results">
+        <div class="tabs">
+          <button class="active">Todos</button>
         </div>
-        <div class="year">{{ juego.released ? juego.released.substring(0, 4) : '-' }}</div>
-        <div class="rating">⭐ {{ juego.rating }}</div>
-        <button class="favorite" type="button" @click.stop>♡</button>
-      </div>
 
-      <div v-if="totalPages > 1" class="pagination">
-        <button
-          :disabled="currentPage === 1"
-          @click="changePage(currentPage - 1)"
-          class="pagination__btn"
-        >
-          ← Anterior
-        </button>
-        <div class="pagination__info">Página {{ currentPage }} de {{ totalPages }}</div>
-        <button
-          :disabled="currentPage === totalPages"
-          @click="changePage(currentPage + 1)"
-          class="pagination__btn"
-        >
-          Siguiente →
-        </button>
-      </div>
-    </section>
+        <h2>Juegos ({{ items.length }})</h2>
+
+        <div class="buscador__grid">
+          <div
+            v-for="juego in items"
+            :key="juego.id"
+            class="buscador__item"
+          >
+            <GameCard
+              :id="juego.id"
+              :nombre="juego.name"
+              :imagen="juego.background_image"
+              :rating="juego.rating"
+              :plataformas="getNombrePlataformas(juego)"
+              :es-favorito="esFavorito(juego.id)"
+              @toggle-favorito="manejarToggleFavorito"
+            />
+          </div>
+        </div>
+
+        <div v-if="totalPages > 1" class="pagination">
+          <button
+            :disabled="currentPage === 1"
+            @click="changePage(currentPage - 1)"
+            class="pagination__btn"
+          >
+            ← Anterior
+          </button>
+          <div class="pagination__info">Página {{ currentPage }} de {{ totalPages }}</div>
+          <button
+            :disabled="currentPage === totalPages"
+            @click="changePage(currentPage + 1)"
+            class="pagination__btn"
+          >
+            Siguiente →
+          </button>
+        </div>
+      </section>
+
 
     <div v-else-if="!loading && !error" class="buscador__estado">
       Busca un videojuego para comenzar.
@@ -223,54 +251,31 @@ function changePage(page: number) {
 
 /* ── Tarjeta ── */
 
-.game-card {
+.buscador__grid {
   display: grid;
-  grid-template-columns: 80px 1fr 100px 100px 50px;
-  align-items: center;
-  gap: 15px;
-  padding: 15px;
-  margin-bottom: 12px;
-  border-radius: 12px;
-  background: var(--color-bg);
-  border: 1px solid var(--color-border);
+  gap: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  margin-top: 10px;
+}
+
+
+@media (max-width: 1024px) {
+  .buscador__grid {
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+}
+
+
+@media (max-width: 640px) {
+  .buscador__grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+}
+
+.buscador__item {
   cursor: pointer;
-  transition:
-    background 0.2s,
-    border-color 0.2s;
 }
 
-.game-card:hover {
-  background: var(--color-bg-hover);
-  border-color: var(--color-border-mid);
-}
-
-.game-card img {
-  width: 65px;
-  height: 65px;
-  border-radius: 10px;
-  object-fit: cover;
-}
-
-.game-info h3 {
-  margin: 0;
-  font-size: 0.95rem;
-  font-family: var(--font-body);
-  font-weight: 500;
-  color: var(--color-text);
-}
-
-.year,
-.rating {
-  color: var(--color-text-muted);
-  text-align: center;
-  font-size: 0.9rem;
-}
-
-.favorite {
-  background: transparent;
-  color: var(--color-warning, #ffcc66);
-  font-size: 1.2rem;
-}
 
 /* ── Paginador ── */
 
@@ -320,17 +325,6 @@ function changePage(page: number) {
   .tabs {
     flex-wrap: wrap;
   }
-
-  .game-card {
-    grid-template-columns: 70px 1fr;
-    gap: 12px;
-  }
-
-  .year,
-  .rating,
-  .favorite {
-    grid-column: 2;
-    text-align: left;
-  }
 }
+
 </style>

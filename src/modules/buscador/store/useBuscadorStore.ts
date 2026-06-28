@@ -11,7 +11,7 @@ const createState = (): BuscadorState => ({
   error: null,
   currentPage: 1,
   totalCount: 0,
-  pageSize: 20,
+  pageSize: 24,
 })
 
 export const useBuscadorStore = defineStore('buscador', {
