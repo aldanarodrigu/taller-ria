@@ -14,7 +14,7 @@ export async function fetchJuegosPorBusqueda(query: string, page: number = 1): P
   const params = new URLSearchParams()
   params.set('key', buscadorConfig.apiKey)
   params.set('search', query.trim())
-  params.set('page_size', '20')
+  params.set('page_size', '24')
   params.set('page', String(page))
 
   const response = await fetch(`${buscadorConfig.baseUrl}/games?${params.toString()}`)
