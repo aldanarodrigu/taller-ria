@@ -19,8 +19,8 @@ let observador: IntersectionObserver | null = null
 
 onMounted(() => {
   observador = new IntersectionObserver(
-    (entradas) => {
-      if (entradas[0].isIntersecting && hayMas.value && !loading.value) {
+    ([entrada]) => {
+      if (entrada?.isIntersecting && hayMas.value && !loading.value) {
         void cargarMas()
       }
     },
