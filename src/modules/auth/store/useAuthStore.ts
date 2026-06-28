@@ -10,6 +10,9 @@ import {
   obtenerUsuariosGuardados,
   registrarUsuario,
   toggleFavoritoUsuarioActual,
+  eliminarResenaUsuarioActual,
+  guardarResenaUsuarioActual,
+  obtenerResenaUsuarioActual,
 } from '../service/auth.service'
 import type { DatosPerfilEditable } from '@/modules/perfil/type/perfil.types'
 import type {
@@ -124,6 +127,40 @@ export const useAutenticacionStore = defineStore('auth', {
 
       try {
         const usuarioActualizado = toggleFavoritoUsuarioActual(gameId)
+        this.usuarios = obtenerUsuariosGuardados()
+        this.usuarioActual = usuarioActualizado
+
+        return usuarioActualizado
+      } catch (error) {
+        this.error = error instanceof Error ? error.message : 'Error inesperado'
+        throw error
+      }
+    },
+
+    obtenerResena(gameId: number) {
+      return obtenerResenaUsuarioActual(gameId)
+    },
+
+    guardarResena(gameId: number, texto: string, puntaje: number | null) {
+      this.error = null
+
+      try {
+        const usuarioActualizado = guardarResenaUsuarioActual(gameId, texto, puntaje)
+        this.usuarios = obtenerUsuariosGuardados()
+        this.usuarioActual = usuarioActualizado
+
+        return usuarioActualizado
+      } catch (error) {
+        this.error = error instanceof Error ? error.message : 'Error inesperado'
+        throw error
+      }
+    },
+
+    eliminarResena(gameId: number) {
+      this.error = null
+
+      try {
+        const usuarioActualizado = eliminarResenaUsuarioActual(gameId)
         this.usuarios = obtenerUsuariosGuardados()
         this.usuarioActual = usuarioActualizado
 

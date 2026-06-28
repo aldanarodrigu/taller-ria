@@ -10,6 +10,7 @@ export interface UsuarioLocal {
   contrasena: string
   perfil: PerfilUsuario
   favoritos: number[]
+  resenas: ResenaJuegoLocal[]
   fechaCreacion: string
 }
 
@@ -44,3 +45,14 @@ export interface CampoFormularioAutenticacion {
 }
 
 export type ValoresFormularioAutenticacion = Record<string, string>
+
+// Types de reseñas
+export interface ResenaJuegoLocal {
+  gameId: number
+  texto: string
+  puntaje: number | null
+  fechaCreacion: string
+  fechaActualizacion: string
+}
+
+

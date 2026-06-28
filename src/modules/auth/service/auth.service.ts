@@ -5,6 +5,7 @@ import type {
   DatosRegistro,
   PerfilUsuario,
   SesionAuth,
+  ResenaJuegoLocal,
   UsuarioLocal,
 } from '../type/auth.types'
 
@@ -46,6 +47,24 @@ function normalizarFavoritos(favoritos: unknown): number[] {
   return favoritos.filter((favorito): favorito is number => Number.isInteger(favorito))
 }
 
+function normalizarResenas(resenas: unknown): ResenaJuegoLocal[] {
+  if (!Array.isArray(resenas)) {
+    return []
+  }
+
+  return resenas
+    .filter((resena): resena is Partial<ResenaJuegoLocal> => typeof resena === 'object' && resena !== null)
+    .map((resena) => ({
+      gameId: Number(resena.gameId),
+      texto: typeof resena.texto === 'string' ? resena.texto.trim() : '',
+      puntaje: typeof resena.puntaje === 'number' ? resena.puntaje : null,
+      fechaCreacion: typeof resena.fechaCreacion === 'string' ? resena.fechaCreacion : new Date().toISOString(),
+      fechaActualizacion:
+        typeof resena.fechaActualizacion === 'string' ? resena.fechaActualizacion : new Date().toISOString(),
+    }))
+    .filter((resena) => Number.isInteger(resena.gameId) && resena.texto.length > 0)
+}
+
 function normalizarUsuarioLocal(usuario: Partial<UsuarioLocal>): UsuarioLocal {
   const nickname = usuario.nickname?.trim()
 
@@ -60,6 +79,7 @@ function normalizarUsuarioLocal(usuario: Partial<UsuarioLocal>): UsuarioLocal {
     id: usuario.id,
     nickname,
     perfil: normalizarPerfilUsuario(usuario.perfil),
+    resenas: normalizarResenas(usuario.resenas)
   }
 }
 
@@ -156,6 +176,7 @@ export function registrarUsuario(datos: DatosRegistro): UsuarioLocal {
     contrasena: contrasenaIngresada,
     fechaCreacion: new Date().toISOString(),
     favoritos: [],
+    resenas: [],
     perfil: {
       avatarSeed: generarAvatarSeedAleatorio(),
       nombreVisible: '',
@@ -218,6 +239,62 @@ export function toggleFavoritoUsuarioActual(gameId: number): UsuarioLocal {
       favoritos,
     }
   })
+}
+
+export function obtenerResenaUsuarioActual(gameId: number): ResenaJuegoLocal | null {
+  const sesion = obtenerSesionGuardada()
+
+  if (!sesion) {
+    return null
+  }
+
+  const usuarioActual = buscarUsuarioPorId(sesion.usuarioId)
+  return usuarioActual?.resenas.find((resena) => resena.gameId === gameId) ?? null
+}
+
+export function guardarResenaUsuarioActual(
+  gameId: number,
+  texto: string,
+  puntaje: number | null,
+): UsuarioLocal {
+  const textoNormalizado = texto.trim()
+
+  if (!textoNormalizado) {
+    throw new Error('La reseña no puede estar vacia')
+  }
+
+  if (puntaje !== null && (puntaje < 1 || puntaje > 5)) {
+    throw new Error('El puntaje debe estar entre 1 y 5')
+  }
+
+  return actualizarUsuarioAutenticado((usuarioActual) => {
+    const fechaActual = new Date().toISOString()
+    const resenaExistente = usuarioActual.resenas.find((resena) => resena.gameId === gameId)
+
+    const resenaActualizada: ResenaJuegoLocal = {
+      gameId,
+      texto: textoNormalizado,
+      puntaje,
+      fechaCreacion: resenaExistente?.fechaCreacion ?? fechaActual,
+      fechaActualizacion: fechaActual,
+    }
+
+    const resenas = resenaExistente
+      ? usuarioActual.resenas.map((resena) => (resena.gameId === gameId ? resenaActualizada : resena))
+      : [...usuarioActual.resenas, resenaActualizada]
+
+    return {
+      ...usuarioActual,
+      resenas,
+    }
+  })
+}
+
+export function eliminarResenaUsuarioActual(gameId: number): UsuarioLocal {
+  return actualizarUsuarioAutenticado((usuarioActual) => ({
+    ...usuarioActual,
+    resenas: usuarioActual.resenas.filter((resena) => resena.gameId !== gameId),
+  }))
 }
 
 export function actualizarPerfilUsuario(datos: DatosPerfilEditable): UsuarioLocal {

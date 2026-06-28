@@ -40,6 +40,18 @@ export function useAutenticacion() {
     return store.toggleFavorito(gameId)
   }
 
+  function obtenerResena(gameId: number) {
+    return store.obtenerResena(gameId)
+  }
+
+  function guardarResena(gameId: number, texto: string, puntaje: number | null) {
+    return store.guardarResena(gameId, texto, puntaje)
+  }
+
+  function eliminarResena(gameId: number) {
+    return store.eliminarResena(gameId)
+  }
+
   function esFavorito(gameId: number) {
     return store.esFavorito(gameId)
   }
@@ -72,5 +84,8 @@ export function useAutenticacion() {
     toggleFavorito,
     usuarioActual,
     usuarios,
+    eliminarResena,
+    guardarResena,
+    obtenerResena,
   }
 }
