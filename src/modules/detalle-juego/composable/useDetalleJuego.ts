@@ -140,5 +140,6 @@ export function useDetalleJuego() {
     estaCargando,
     mensajeError,
     recargar,
+    idJuego,
   }
 }

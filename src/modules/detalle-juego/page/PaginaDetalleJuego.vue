@@ -8,6 +8,7 @@ import PlataformasDetalleJuego from '../component/PlataformasDetalleJuego.vue'
 import ResumenDetalleJuego from '../component/ResumenDetalleJuego.vue'
 import TiendasDetalleJuego from '../component/TiendasDetalleJuego.vue'
 import { useDetalleJuego } from '../composable/useDetalleJuego'
+import { useResenaJuego } from '../composable/useResenaJuego'
 import Navbar from '@/shared/components/Navbar.vue'
 
 const router = useRouter()
@@ -17,7 +18,25 @@ const {
   estaCargando,
   mensajeError,
   recargar,
+  idJuego,
 } = useDetalleJuego()
+
+const {
+  cancelarEdicion: cancelarEdicionResena,
+  editando: resenaEditando,
+  eliminar: eliminarResena,
+  error: resenaError,
+  exito: resenaExito,
+  guardar: guardarResena,
+  iniciarEdicion: iniciarEdicionResena,
+  puntaje: resenaPuntaje,
+  resenaGuardada,
+  texto: resenaTexto,
+  tieneResena,
+  tieneSesion: usuarioPuedeResenar,
+  actualizarPuntaje: actualizarPuntajeResena,
+  actualizarTexto: actualizarTextoResena,
+} = useResenaJuego(() => idJuego.value)
 
 function volverPaginaAnterior() {
   if (window.history.length > 1) {
