@@ -21,7 +21,7 @@ defineOptions({ inheritAttrs: false })
 </script>
 
 <template>
-  <section class="game-grid" :id="$attrs.id">
+  <section class="game-grid" :id="($attrs.id as string | undefined)">
     <div class="game-grid__header">
       <h2 class="game-grid__titulo">{{ title }}</h2>
       <span class="game-grid__linea" />

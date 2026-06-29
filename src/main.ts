@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import VueParticles from '@tsparticles/vue3'
 import { loadSlim } from '@tsparticles/slim'
+import type { Engine } from '@tsparticles/engine'
 
 import App from './App.vue'
 import router from './router'
@@ -12,7 +13,7 @@ const app = createApp(App)
 app.use(pinia)
 app.use(router)
 app.use(VueParticles, {
-  init: async (engine) => {
+  init: async (engine: Engine) => {
     await loadSlim(engine)
   },
 })
