@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 import { catalogoConfig } from '../config/catalogo.config'
 import { fetchJuegos, fetchPaginaSiguiente } from '../service/catalogo.service'
-import type { CatalogoState, FiltrosCatalogo } from '../type/catalogo.types'
+import type { CatalogoState, FiltrosCatalogo, JuegoRawg } from '../type/catalogo.types'
 
 const filtrosIniciales: FiltrosCatalogo = {
   genero: '',
